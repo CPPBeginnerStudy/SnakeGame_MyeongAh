@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Base">
+      <UniqueIdentifier>{a12ece94-ac17-47a3-b6fc-b3f6709dd56f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class">
+      <UniqueIdentifier>{5290ce0b-c970-428d-9ad1-56742e43da37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\Object">
+      <UniqueIdentifier>{b5cd9668-2e89-4011-a073-85cf45ea7290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\Singleton">
+      <UniqueIdentifier>{41ae3266-f48c-4f5f-bb80-d48b254c4458}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Class\Singleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Class\Singleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Class\Object</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Class\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Class\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Class\Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
