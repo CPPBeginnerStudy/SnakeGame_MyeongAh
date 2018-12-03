@@ -1,4 +1,6 @@
 #pragma once
+class Object;
+
 class GameManager
 {
 public: // 다른 데에서 호출할 수 있음
@@ -12,6 +14,10 @@ public: // 다른 데에서 호출할 수 있음
 		static GameManager instance; // static 변수는 데이터 영역에 저장되기 때문에, 어디서든 가져다 쓸 수 있음. 여러 번 불려도 한번만 생성됨.
 		return instance;
 	}
+	
+private:
+	GameManager();
+	~GameManager();
 
 public:
 	void Run();
@@ -22,12 +28,13 @@ private: // 클래스 내에서만 호출할 수 있음
 	void Release();
 	void MainLoop();
 
-private:
-	GameManager() {}
-	~GameManager() {}
+	void Update();
+	void Render();
 
 private:
 	bool m_IsOn;
+	std::list<Object*> m_objectList;
+	// 한 프레임마다 움직여야 할 오브젝트를 찾아갈 수 있도록 힙메모리에 저장될 오브젝트의 주소를 저장하는 리스트
 };
 
 // 멤버 변수에는 m_대문자로 시작

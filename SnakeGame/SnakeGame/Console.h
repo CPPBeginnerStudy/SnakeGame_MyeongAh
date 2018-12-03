@@ -14,7 +14,11 @@ public: // 다른 데에서 호출할 수 있음
 	}
 
 private:
-	Console() {}
-	~Console() {}
+	Console();
+	~Console();
+
+public:
+	void Init();
+	void Releas();
 };
 
