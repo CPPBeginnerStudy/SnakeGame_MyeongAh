@@ -1,8 +1,14 @@
 #include "pch.h"
 #include "Object.h"
+#include "Console.h"
 
 
 Object::Object()
+	: m_Shape(' ')
+	, m_X(0)
+	, m_Y(0)
+	, m_IsRight(true)
+	, m_IsBottom(true)
 {
 }
 
@@ -20,8 +26,48 @@ void Object::Release()
 
 void Object::Update()
 {
+	// 화면의 바운더리를 벗어나려 하면, 반대 방향으로 전환하여 계속 움직이도록 한다.
+	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
+	if (m_IsRight)
+	{
+		++m_X;
+		if (m_X > boundaryBox.right)
+		{
+			m_X = boundaryBox.right;
+			m_IsRight = false;
+		}
+	}
+	else
+	{
+		--m_X;
+		if (m_X < boundaryBox.left)
+		{
+			m_X = boundaryBox.left;
+			m_IsRight = true;
+		}
+	}
+	if (m_IsBottom)
+	{
+		++m_Y;
+		if (m_Y > boundaryBox.bottom)
+		{
+			m_Y = boundaryBox.bottom;
+			m_IsBottom = false;
+		}
+	}
+	else
+	{
+		--m_Y;
+		if (m_Y < boundaryBox.top)
+		{
+			m_Y = boundaryBox.top;
+			m_IsBottom = true;
+		}
+	}
 }
 
 void Object::Render()
 {
+	// 현재 내 위치(m_X, m_Y)에 내 모습(m_Shape)을 그리도록 한다.
+	Console::GetInstance().Print(m_Shape, m_X, m_Y);
 }
