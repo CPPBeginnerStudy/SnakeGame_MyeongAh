@@ -115,6 +115,8 @@ void GameManager::Render()
 {
 	// 렌더링을 시작하기 전, 백버퍼를 먼저 깨끗하게 지운다.
 	// Q. 안 지우면 이전꺼랑 겹쳐서 나오게 되나요?
+    /// > 넵. Clear()를 안하면 이전 프레임에 그려졌던 내용에 추가로 그리게 됩니다.
+    /// > 즉, 이전꺼랑 겹쳐서 화면에 표시됩니다.
 	auto& console = Console::GetInstance();
 	console.Clear();
 
