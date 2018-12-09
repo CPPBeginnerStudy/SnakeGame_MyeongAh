@@ -23,10 +23,14 @@ public:
 	char GetShape() const { return m_Shape; }
 	short GetX() const { return m_X; }
 	short GetY() const { return m_Y; }
+	int GetVelocityX() const { return m_VelocityX; }
+	int GetVelocityY() const { return m_VelocityY; }
 
 	void SetShape(char _shape) { m_Shape = _shape; }
 	void SetX(short _x) { m_X = _x; }
 	void SetY(short _y) { m_Y = _y; }
+	void SetVelocityX(short _VelX) { m_VelocityX = _VelX; }
+	void SetVelocityY(short _VelY) { m_VelocityY = _VelY; }
 
 private:
 	// 랜더링 될 객체는 자신의 모양을 하나의 문자(char)로 나타내며,
@@ -40,4 +44,10 @@ private:
 	// 현재 이동 방향을 오/왼, 위/아래 구분하기 위한 변수
 	bool m_IsRight;
 	bool m_IsBottom;
+
+	// 이동 속도 제어 변수
+	int m_VelocityX;
+	int m_VelocityY;
+	bool m_VelFlagX;
+	bool m_VelFlagY;
 };
