@@ -14,6 +14,10 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	// Init(), Release()는 엄청 큰 오브젝트를 만들었을 때,
+	// Delete 해주지 않고, 다시 초기화 해서 쓰는 방식으로 사용함.
+	// 우리 게임은 그정도로 큰 오브젝트가 아니고, 생성자에서 초기화 다 해줄 수 있는 수준이라 삭제함!
+
 	// 선언할 때, virtual을 쓰지 않으면 자식 오브젝트에서 오버라이딩 해서 쓸 수 없음
 	// 오브젝트 타입의 객체 리스트에 자식 오브젝트를 담고 사용하려고 할 때,
 	// virtual이 아니라면 자식이 상속받은 그 함수를 찾을 수 없음.
@@ -31,6 +35,8 @@ public:
 	void SetY(short _y) { m_Y = _y; }
 	void SetVelocityX(short _VelX) { m_VelocityX = _VelX; }
 	void SetVelocityY(short _VelY) { m_VelocityY = _VelY; }
+
+	// Private로 선언한 변수들은 .... 설명 주석 써주신댔다!! ㅎ_ㅎ)
 
 private:
 	// 랜더링 될 객체는 자신의 모양을 하나의 문자(char)로 나타내며,
