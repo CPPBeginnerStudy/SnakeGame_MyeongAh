@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "Console.h"
 #include "Object.h"
+#include "RandomSpeedObj.h"
 
 // 생성자, 소멸자는 이미 역할이 정해져 있어서, 반환 타입이 필요 없다. (void 이런거)
 GameManager::GameManager()
@@ -30,6 +31,7 @@ void GameManager::Init()
 {
 	Console::GetInstance().Init();
 	// 랜덤값 사용을 위해 랜덤시드를 초기화
+	// 게임 시작 시, 딱 한번만 해주어야 한다!
 	srand((unsigned int)time(nullptr));
 
 	// Console 객체의 인스턴스를 가져와서 console이라는 참조변수에 저장하여 사용
@@ -41,15 +43,27 @@ void GameManager::Init()
 
 	// 5개의 object를 생성하면서 바운더리 내에서 x, y 좌표를 매번 랜덤하게 지정
 	RECT boundaryBox = console.GetBoundaryBox();
-	for (int i = 0; i < 5; ++i)
+	
+	// 2개는 기본 오브젝트로 생성
+	for (int i = 0; i < 2; i++)
 	{
 		Object* pObject = new Object();
 		pObject->Init();
 		pObject->SetShape(L'★'); // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
 		pObject->SetX(rand() % boundaryBox.right);
 		pObject->SetY(rand() % boundaryBox.bottom);
-		pObject->SetVelocityX((rand() % 3) + 1);
-		pObject->SetVelocityY((rand() % 3) + 1);
+		m_objectList.push_back(pObject);
+	}
+
+	// 3개는 Object를 상속받은 RandomSpeedObject라는 클래스로 생성
+	// RandomSpeedObj는 Object의 자식이기 때문에 Object*를 담는 자료구조에 같이 보관 가능
+	for (int i = 0; i < 3; ++i)
+	{
+		Object* pObject = new Object();
+		pObject->Init();
+		pObject->SetShape(L'♣'); // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
+		pObject->SetX(rand() % boundaryBox.right);
+		pObject->SetY(rand() % boundaryBox.bottom);
 		m_objectList.push_back(pObject);
 	}
 	/*

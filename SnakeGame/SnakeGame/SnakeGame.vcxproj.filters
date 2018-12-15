@@ -30,6 +30,9 @@
     <ClCompile Include="Object.cpp">
       <Filter>Class\Object</Filter>
     </ClCompile>
+    <ClCompile Include="RandomSpeedObj.cpp">
+      <Filter>Class\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -42,6 +45,9 @@
       <Filter>Class\Singleton</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
+      <Filter>Class\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomSpeedObj.h">
       <Filter>Class\Object</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,18 +27,14 @@ public:
 	wchar_t GetShape() const { return m_Shape; }
 	short GetX() const { return m_X; }
 	short GetY() const { return m_Y; }
-	int GetVelocityX() const { return m_VelocityX; }
-	int GetVelocityY() const { return m_VelocityY; }
 
 	void SetShape(wchar_t _shape) { m_Shape = _shape; }
 	void SetX(short _x) { m_X = _x; }
 	void SetY(short _y) { m_Y = _y; }
-	void SetVelocityX(short _VelX) { m_VelocityX = _VelX; }
-	void SetVelocityY(short _VelY) { m_VelocityY = _VelY; }
 
-	// Private로 선언한 변수들은 .... 설명 주석 써주신댔다!! ㅎ_ㅎ)
-
-private:
+	// private: 본 클래스 내에서만 접근 가능 (자식 클래스에서는 접근 X, 진짜 나 자신만 접근 되는 것)
+	// protected: 자식 클래스에서도 접근 가능
+protected:
 	// 랜더링 될 객체는 자신의 모양을 하나의 문자(wchar_t)로 나타내며,
 	// x, y 좌표를 통해 현재 위치를 알 수 있게 한다.
 	// cmd관련 라이브러리 함수에서 좌표값들을 short 타입으로 다루기 때문에
@@ -50,10 +46,4 @@ private:
 	// 현재 이동 방향을 오/왼, 위/아래 구분하기 위한 변수
 	bool m_IsRight;
 	bool m_IsBottom;
-
-	// 이동 속도 제어 변수
-	int m_VelocityX;
-	int m_VelocityY;
-	bool m_VelFlagX;
-	bool m_VelFlagY;
 };
