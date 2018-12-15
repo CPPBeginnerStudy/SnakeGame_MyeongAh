@@ -4,7 +4,7 @@
 
 
 Object::Object()
-	: m_Shape(' ')
+	: m_Shape(L' ') // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
 	, m_X(0)
 	, m_Y(0)
 	, m_IsRight(true)

@@ -45,7 +45,7 @@ void GameManager::Init()
 	{
 		Object* pObject = new Object();
 		pObject->Init();
-		pObject->SetShape('O');
+		pObject->SetShape(L'★'); // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
 		pObject->SetX(rand() % boundaryBox.right);
 		pObject->SetY(rand() % boundaryBox.bottom);
 		pObject->SetVelocityX((rand() % 3) + 1);

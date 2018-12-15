@@ -24,8 +24,15 @@ public:
 	void Clear();
 	void SwapBuffer();
 
-	void Print(char _shape, short _x, short _y);
-	void PrintText(const std::string& _text, short _x, short _y);
+	// 문자 및 문자열 출력에서 char, string이 아닌 wchar_t, wstring을 쓰는 이유?
+	// 기본 문자 타입으로는 한글/특수기호를 표현하기 어렵기 때문
+	// char은 기본적으로 1바이트만을 저장 가능한데, 한글/특수기호는 최소 2바이트가 필요하기 때문
+	// 2바이트 크기로 저장되는 wchar_t (와이드 캐릭터 타입)을 사용해야 하나의 글자를 온전히 표현할 수 있음
+	// wstring은 이러한 wchar_t를 이용하는 string인 것
+	// 참고로 흔히 사용하는 '유니코드' 인코딩 방법이 wchar_t를 사용한다.
+	// 자세히 알고 싶다면, MBCS(Multi Byte)와 WBCS(Wide Byte)의 차이를 구글에게 물어보자!
+	void Print(wchar_t _shape, short _x, short _y);
+	void PrintText(const std::wstring& _text, short _x, short _y);
 
 	RECT GetBoundaryBox() const;
 

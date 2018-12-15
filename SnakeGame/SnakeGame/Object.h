@@ -24,13 +24,13 @@ public:
 	// 자식/부모 함수 둘 다에 virtual이 있고, 자식 함수에 override가 있어야 쓸 수 있음
 	// 안 그러면 타입 케스팅 해서 써야 됨
 
-	char GetShape() const { return m_Shape; }
+	wchar_t GetShape() const { return m_Shape; }
 	short GetX() const { return m_X; }
 	short GetY() const { return m_Y; }
 	int GetVelocityX() const { return m_VelocityX; }
 	int GetVelocityY() const { return m_VelocityY; }
 
-	void SetShape(char _shape) { m_Shape = _shape; }
+	void SetShape(wchar_t _shape) { m_Shape = _shape; }
 	void SetX(short _x) { m_X = _x; }
 	void SetY(short _y) { m_Y = _y; }
 	void SetVelocityX(short _VelX) { m_VelocityX = _VelX; }
@@ -39,11 +39,11 @@ public:
 	// Private로 선언한 변수들은 .... 설명 주석 써주신댔다!! ㅎ_ㅎ)
 
 private:
-	// 랜더링 될 객체는 자신의 모양을 하나의 문자(char)로 나타내며,
+	// 랜더링 될 객체는 자신의 모양을 하나의 문자(wchar_t)로 나타내며,
 	// x, y 좌표를 통해 현재 위치를 알 수 있게 한다.
 	// cmd관련 라이브러리 함수에서 좌표값들을 short 타입으로 다루기 때문에
 	// 여기서도 short 타입으로 좌표 변수를 지정한다.
-	char m_Shape;
+	wchar_t m_Shape;
 	short m_X;
 	short m_Y;
 
