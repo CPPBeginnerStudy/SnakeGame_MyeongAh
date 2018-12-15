@@ -19,10 +19,8 @@ public:
 	// 상속 해서 쓰려면 Virtual을 써 줘야 함
 	// Java에서 Abstract 그 것과 같은 것
 
-	// 오브젝트 생성할 때 Init, 소멸시킬 때 Release
+	// 오브젝트 생성할 때 Init, 소멸시킬 때 Release -> 필요 없을 것 같아 삭제
 	// 오브젝트마다 각자 알아서 업데이트, 랜더링
-	virtual void Init();
-	virtual void Release();
 	virtual void Update();
 	virtual void Render();
 
@@ -36,6 +34,7 @@ public:
 	// 자식/부모 함수 둘 다에 virtual이 있고, 자식 함수에 override가 있어야 쓸 수 있음
 	// 안 그러면 타입 케스팅 해서 써야 됨
 
+public:
 	wchar_t GetShape() const { return m_Shape; }
 	float GetX() const { return m_X; }
 	float GetY() const { return m_Y; }

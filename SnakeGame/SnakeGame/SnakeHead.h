@@ -8,11 +8,10 @@ public:
 	SnakeHead();
 	virtual ~SnakeHead();
 
-	virtual void Init() override;
-	virtual void Release() override;
 	virtual void Update() override;
 	virtual void Render() override;
 
+public:
 	float GetSpeed() const { return m_Speed; }
 	void SetSpeed(float _speed) { m_Speed = _speed; }
 

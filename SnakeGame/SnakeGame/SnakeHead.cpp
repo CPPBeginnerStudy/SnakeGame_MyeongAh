@@ -11,18 +11,6 @@ SnakeHead::~SnakeHead()
 {
 }
 
-
-void SnakeHead::Init()
-{
-	Object::Init();
-	m_Speed = 1.f;
-}
-
-void SnakeHead::Release()
-{
-	Object::Release();
-}
-
 void SnakeHead::Update()
 {
 }

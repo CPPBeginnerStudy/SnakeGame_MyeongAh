@@ -50,7 +50,6 @@ void GameManager::Init()
 	for (int i = 0; i < 2; i++)
 	{
 		Object* pObject = new Object();
-		pObject->Init();
 		pObject->SetShape(L'★'); // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
 		pObject->SetX(rand() % boundaryBox.right);
 		pObject->SetY(rand() % boundaryBox.bottom);
@@ -62,7 +61,6 @@ void GameManager::Init()
 	for (int i = 0; i < 3; ++i)
 	{
 		Object* pObject = new Object();
-		pObject->Init();
 		pObject->SetShape(L'♣'); // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
 		pObject->SetX(rand() % boundaryBox.right);
 		pObject->SetY(rand() % boundaryBox.bottom);
@@ -81,7 +79,6 @@ void GameManager::Init()
 
 	// 직접 조종할 뱀의 머리를 생성한다.
 	m_pSnakeHead = new SnakeHead();
-	m_pSnakeHead->Init();
 	m_pSnakeHead->SetShape(L'▣');
 	m_pSnakeHead->SetX(boundaryBox.right / 2);  // 중앙에 생성
 	m_pSnakeHead->SetY(boundaryBox.bottom / 2); // 중앙에 생성
@@ -106,8 +103,9 @@ void GameManager::Release()
 	// m_ObjectList라는 자료구조에서 그 저장된 데이터를 저장된만큼 하나씩 가져오는 반복문
 	for (auto& pObject : m_ObjectList) // 현재는 5개 보관중이므로 5번 실행됨
 	{
-		pObject->Release(); // 가져온 데이터(pObject)에 대해 Release() 호출
-		delete pObject;     // 해당 인스턴스를 delete하여 메모리 할당 해제
+		// pObject->Release(); // 가져온 데이터(pObject)에 대해 Release() 호출
+		delete pObject; //현재 가져온 데이터(pObject)를 delete 하여 메모리 할당 해제
+		// 해당 인스턴스를 delete하여 메모리 할당 해제
 	}
 
 	// 보관중이던 모든 포인터들이 그 가리키던 인스턴스들을 다 할당 해제했으므로

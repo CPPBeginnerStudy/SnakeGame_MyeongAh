@@ -16,8 +16,8 @@
 //		C* pC = new C(); // A생성자 -> B생성자 -> C생성자 순으로 호출됨
 // }
 RandomSpeedObj::RandomSpeedObj()
-	: m_XSpeed(0.f)
-	, m_YSpeed(0.f)
+	: m_XSpeed(1.f)
+	, m_YSpeed(1.f)
 {
 }
 
@@ -42,6 +42,8 @@ RandomSpeedObj::~RandomSpeedObj()
 {
 }
 
+// 앞으로 필요 없을 것 같아 지운다.
+/*
 void RandomSpeedObj::Init()
 {
 	// 오버라이딩 한 함수는 기본적으로 부모 함수를 호출하지 않는다.
@@ -57,6 +59,7 @@ void RandomSpeedObj::Release()
 	// 부모 클래스와 다르게 구현할 게 없다면, 그냥 부모꺼를 여기서 다시 호출해주면 된다.
 	Object::Release();
 }
+*/
 
 void RandomSpeedObj::Update()
 {
