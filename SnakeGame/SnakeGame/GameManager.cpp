@@ -61,6 +61,7 @@ void GameManager::Init()
 	// RandomSpeedObj는 Object의 자식이기 때문에 Object*를 담는 자료구조에 같이 보관 가능
 	for (int i = 0; i < 3; ++i)
 	{
+        /// > 아래에서 RandomSpeedObj()가 아니라 Object()로 생성하고 있네요;ㅁ;
 		Object* pObject = new Object();
 		pObject->SetShape(L'♣'); // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
 		pObject->SetX(rand() % boundaryBox.right);
@@ -87,6 +88,9 @@ void GameManager::Init()
 
 	// Q. 이상하게!!!!!!!!!!!!!!! 잘 움직이다가 다른 오브젝트랑 같이 움직이는데...
 	//    왜 그러는 걸까요?????????? @_@?????????????
+    /// > 요것은.. 빌드해서 테스트해봐도 재현이 안되는 군요...@_@
+    /// > 보통 객체의 좌표가 cmd창의 범위를 벗어나면 그런 현상이 발생하는데..
+    /// > 지금 코드에선 문제없는 듯 한데.. 혹시 재현이 되고 계신다면 재현스텝을...알려주세요ㅋㅋ
 
 	// 모든 초기화 완료 되었으므로 게임 ON
 	m_IsOn = true;
