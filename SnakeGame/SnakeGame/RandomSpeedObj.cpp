@@ -63,9 +63,26 @@ void RandomSpeedObj::Release()
 
 void RandomSpeedObj::Update()
 {
+	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
+	// Move()의 리턴 값이 false일 때 (즉, 바운더리에 닿았을 때)
+	// 방향을 반전시키고 속도를 랜덤으로 변경하는 코드
+	// 기존의 공통된 로직(이동 로직)을 Move()라는 함수로 추출하여
+	// 중복 코드를 줄이고 차이점을 파악하기 더 쉬워졌다.
+
+	if (!Move(m_IsRight ? Direction::RIGHT : Direction::LEFT, m_XSpeed))
+	{
+		m_IsRight = !m_IsRight;
+		m_XSpeed = (rand() % 6 + 1) * 0.5f; // 0.5배 ~ 3배
+	}
+	if (!Move(m_IsBottom ? Direction::DOWN : Direction::UP, m_YSpeed))
+	{
+		m_IsBottom = !m_IsBottom;
+		m_YSpeed = (rand() % 6 + 1) * 0.5f;
+	}
+
+	/*
 	// Update()의 경우는 새롭게 구현을 재정의하기 위해
 	// 부모의 Update()를 호출하지 않은 점 참고.
-	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
 	if (m_IsRight)
 	{
 		m_X += 2 * m_XSpeed;
@@ -106,6 +123,7 @@ void RandomSpeedObj::Update()
 			m_YSpeed = (rand() % 6 + 1) * 0.5f;
 		}
 	}
+	*/
 }
 
 void RandomSpeedObj::Render()

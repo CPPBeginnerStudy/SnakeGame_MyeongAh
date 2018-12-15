@@ -34,6 +34,7 @@ void GameManager::Init()
 	Console::GetInstance().Init();
 	// 랜덤값 사용을 위해 랜덤시드를 초기화
 	// 게임 시작 시, 딱 한번만 해주어야 한다!
+	// 이 랜덤 시드를 기반으로 앞으로 랜덤 값을 산출하게 된다.
 	srand((unsigned int)time(nullptr));
 
 	// Console 객체의 인스턴스를 가져와서 console이라는 참조변수에 저장하여 사용

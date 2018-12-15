@@ -14,6 +14,30 @@
 class Object
 {
 public:
+	// 클래스 내부에 또다른 클래스나 enum 등을 정의할 수 있다.
+	// 이렇게 내부에 정의한 타입은 그 상위 타입의 이름 공간 내에 들어간다.
+	// 즉, 아래의 Direction 이라는 enum은 Object 내에서는 Direction:: 으로 사용이 가능하고 
+	// Object 외부에서는 Object::Direction:: 으로 사용해야 한다.
+	// 만약 이런 기능이 없다면, 이름을 지을 때마다 매번 같은 의미여도 이름이 중복 되지 않도록 새로 지어야 해서
+	// 이름이 길어지게 되는데 이럴 필요가 없게 해준다는 이점이 있다.
+	// 예를 들어, class A와 class B에서 각각 Type이라는 enum을 정의하고자 할 때,
+	// 내부에서는 간단하게 Type으로 쓰고, 외부에서 접근할 때에만 A::Type처럼 범위를 지정해주면 된다.
+	// 이러한 기능이 없다면 TypeForA, TypeForB 등 항상 겹치지 않는 이름을 지어야 한다.
+
+	// 아래의 타입은 그냥 enum이 아닌 enum class 타입인데 둘의 차이는 다음과 같다.
+	// enum은 이름 공간이 없고(전역적), enum class는 이름 공간이 부여 된다.
+	// 예를 들어, 아래 Direction을 그냥 enum으로 정의하면 사용 시, Direction::를 붙히지 않고 사용하게 되며
+	// 그러면 위에서 설명한 것과 같이 이름 짓기가 까다로워 지는 것이다.
+	// UP, DOWN 등이 모든 다른 enum들과도 겹치지 않도록 해야 하기 때문.
+	enum Direction
+	{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT, // Q. 왜 맨 끝 인자까지 ,를 써주나요?
+	};
+
+public:
 	Object();
 	virtual ~Object();
 	// 상속 해서 쓰려면 Virtual을 써 줘야 함
@@ -42,6 +66,10 @@ public:
 	void SetShape(wchar_t _shape) { m_Shape = _shape; }
 	void SetX(float _x) { m_X = _x; }
 	void SetY(float _y) { m_Y = _y; }
+
+	// 방향과 거리를 인자로 받아서 이동을 수행하고
+	// 실제로 이동 했는지 여부를 bool 값으로 반환하는 함수
+	bool Move(Direction _dir, float _distance);
 
 	// private: 본 클래스 내에서만 접근 가능 (자식 클래스에서는 접근 X, 진짜 나 자신만 접근 되는 것)
 	// protected: 자식 클래스에서도 접근 가능
