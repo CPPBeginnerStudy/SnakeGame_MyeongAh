@@ -131,6 +131,6 @@ RECT Console::GetBoundaryBox() const
 	boundaryBox.top = 0;
 	boundaryBox.left = 0;
 	boundaryBox.right = m_ScreenWidth - 2;
-	boundaryBox.bottom = m_ScreenHeight - 1;
+	boundaryBox.bottom = m_ScreenHeight - 2; // 아래 한 줄을 비우기 위해 -1 추가 (마지막 줄은 오른쪽 끝이 표시 불가)
 	return boundaryBox;
 }

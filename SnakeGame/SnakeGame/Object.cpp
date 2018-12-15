@@ -5,8 +5,8 @@
 
 Object::Object()
 	: m_Shape(L' ') // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
-	, m_X(0)
-	, m_Y(0)
+	, m_X(0.f)
+	, m_Y(0.f)
 	, m_IsRight(false)
 	, m_IsBottom(false)
 {
@@ -38,7 +38,7 @@ void Object::Update()
 
 	if (m_IsRight)
 	{
-		++m_X;
+		m_X += 2.f;
 		if (m_X > boundaryBox.right)
 		{
 			m_X = boundaryBox.right;
@@ -47,7 +47,7 @@ void Object::Update()
 	}
 	else
 	{
-		--m_X;
+		m_X -= 2.f;
 		if (m_X < boundaryBox.left)
 		{
 			m_X = boundaryBox.left;
@@ -56,7 +56,7 @@ void Object::Update()
 	}
 	if (m_IsBottom)
 	{
-		++m_Y;
+		m_Y += 1.f;
 		if (m_Y > boundaryBox.bottom)
 		{
 			m_Y = boundaryBox.bottom;
@@ -65,7 +65,7 @@ void Object::Update()
 	}
 	else
 	{
-		--m_Y;
+		m_Y -= 1.f;
 		if (m_Y < boundaryBox.top)
 		{
 			m_Y = boundaryBox.top;
@@ -77,5 +77,7 @@ void Object::Update()
 void Object::Render()
 {
 	// 현재 내 위치(m_X, m_Y)에 내 모습(m_Shape)을 그리도록 한다.
-	Console::GetInstance().Print(m_Shape, m_X, m_Y);
+	// 실수형 변수로 바꾸어 주었지만, 어차피 도트 겜이라 좌표는 실수가 나올 수 없어서
+	// 적당히 short로 형변환 해서 Print에 넣어준다. (print가 받는 인자도 실수형이 아님)
+	Console::GetInstance().Print(m_Shape, (short)m_X, (short)m_Y);
 }
