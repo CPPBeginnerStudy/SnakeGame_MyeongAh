@@ -3,10 +3,12 @@
 #include "Console.h"
 
 SnakeHead::SnakeHead()
-	: m_Speed(0.f)
+	: m_Speed(1.f)
+	, m_CurDir(Direction::UP)
     /// > 초기값이 0이어서 처음에 방향키를 눌러도 이동이 안되네요;ㅁ;
     /// > X키를 눌러서 이속을 증가시켜주면 움직이게 되긴 하지만,
     /// > 초기 이속이 어느정도는 있어줘야 좋을 듯 합니다..!
+	// 넵넵! 초기 이속 넣었습니당!! 감사합니다!! ㅎㅎㅎㅎ
 {
 }
 
@@ -16,6 +18,7 @@ SnakeHead::~SnakeHead()
 
 void SnakeHead::Update()
 {
+	Move(m_CurDir, m_Speed);
 }
 
 void SnakeHead::Render()
@@ -35,24 +38,28 @@ void SnakeHead::OnKeyPress(BYTE _key)
 	case VK_UP:
 		{
 			Move(Direction::UP, m_Speed);
+			m_CurDir = Direction::UP;
 		}
 		break;
 
 	case VK_DOWN:
 		{
 			Move(Direction::DOWN, m_Speed);
+			m_CurDir = Direction::DOWN;
 		}
 		break;
 
 	case VK_LEFT:
 		{
 			Move(Direction::LEFT, m_Speed);
+			m_CurDir = Direction::LEFT;
 		}
 		break;
 
 	case VK_RIGHT:
 		{
 			Move(Direction::RIGHT, m_Speed);
+			m_CurDir = Direction::RIGHT;
 		}
 		break;
 
@@ -77,6 +84,7 @@ void SnakeHead::OnKeyPress(BYTE _key)
             /// > 즉, '최대 0.1까지만 된다'가 아니라 '최소 0.1까지만 된다'가 맞습니다.
             /// > min 함수의 경우도 위와같은 원리로 생각하면 됩니다.
             /// > 즉, m_Speed + 0.1f 로 계산된 값이 3.0f 이하여야 그 값이 쓰이는 것입니다.
+			// 오오오 그렇군요!! 이제 이해가 되었어요!! 감사합니당!!!!
 		}
 		break;
 

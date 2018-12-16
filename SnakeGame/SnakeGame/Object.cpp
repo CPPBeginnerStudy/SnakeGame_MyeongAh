@@ -150,6 +150,8 @@ bool Object::Move(Direction _dir, float _distance)
 		}
 		break;
 	}
+	return false;
     /// > 여기 마지막에 return false; 가 누락되어 있어서, 바운더리 도착시 방향전환이 안되고 있습니다.
     /// > 그래서 실행하면 다 한쪽으로 뭉치는 현상이 발생..;ㅁ;
+	// 아하......! 그래서 그런 거였군여!! @_@! 따흐흑 감사합니다...! 이제 잘 되네여!!! ㅎㅎㅎ
 }
