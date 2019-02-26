@@ -114,8 +114,4 @@ protected:
 	wchar_t m_Shape;
 	float m_X;
 	float m_Y;
-
-	// 현재 이동 방향을 오/왼, 위/아래 구분하기 위한 변수
-	bool m_IsRight;
-	bool m_IsBottom;
 };

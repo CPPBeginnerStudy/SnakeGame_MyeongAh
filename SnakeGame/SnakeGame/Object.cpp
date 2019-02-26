@@ -7,8 +7,6 @@ Object::Object()
 	: m_Shape(L' ') // wchar_t로 바뀌었으므로, L' '로 해줘야 한다.
 	, m_X(0.f)
 	, m_Y(0.f)
-	, m_IsRight(false)
-	, m_IsBottom(false)
 {
 }
 
@@ -18,34 +16,6 @@ Object::~Object()
 
 void Object::Update()
 {
-	// 화면의 바운더리를 벗어나려 하면, 반대 방향으로 전환하여 계속 움직이도록 한다.
-	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
-	/// > 제가 srand()에 대한 설명이 부족했었네요.
-	/// > srand()는 rand()사용할 때마다 호출하는 것이 아니라
-	/// > 게임 시작시 딱 한번만 호출되어야 합니다. (GameManager::Init()에서)
-	/// > srand()가 매번 호출되면 그 때마다 랜덤시드(랜덤값의 기반)이 갱신되어서
-	/// > 모든 rand()가 동일한 랜덤값을 반환하게 되어버립니다.
-	/// > srand()는 rand()함수가 값을 산출할 때 참고하는 어떤 기반값을 설정하는 함수입니다.
-	//srand((unsigned int)time(nullptr));
-
-	// 삼항연산자
-	// 간단하게 if문과 같은 분기 처리를 하고 싶을 때 사용
-	// 3개의 항으로 이루어져 있어, 삼항연산자라고 부르며,
-	// 첫 항에서의 true/false 여부에 따라 true이면 둘째항, false이면 셋째항을 수행
-	// (평가식) ? (true인 경우) : (false인 경우)
-	if (!Move(m_IsRight ? Direction::RIGHT : Direction::LEFT, 1.f))
-	{
-		// m_IsRight의 값이 true인 경우 Move()함수의 인자로 RIGHT를 넘기게 되고,
-		//					false인 경우 LEFT를 넘기게 하는 코드
-		// 이동이 실패하면(바운더리에 걸리면) 반대 방향으로 전환
-		// bool값 변수가 자신의 값을 반전시키는 코드 (true->false, false->true)
-		m_IsRight = !m_IsRight;
-	}
-	if (!Move(m_IsBottom ? Direction::DOWN : Direction::UP, 1.f))
-	{
-		m_IsBottom = !m_IsBottom;
-	}
-
 	// 중복 코드라서 이건 함수로 빠진다!
 	/*
 	if (m_IsRight)

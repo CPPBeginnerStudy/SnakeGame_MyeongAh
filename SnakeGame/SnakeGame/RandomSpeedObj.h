@@ -17,5 +17,9 @@ public:
 private:
 	float m_XSpeed;
 	float m_YSpeed;
+
+	// 현재 이동 방향을 오른쪽/왼쪽 구분, 위/아래 구분하기 위한 변수이다.
+	bool m_IsRight;
+	bool m_IsBottom;
 };
 
