@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SnakeHead.h"
 #include "Console.h"
+#include "GameManager.h"
 
 SnakeHead::SnakeHead()
 	: m_Speed(1.f)
@@ -45,6 +46,24 @@ void SnakeHead::Update()
 		pTail->SetY(prevY);
 		prevX = tempX;
 		prevY = tempY;
+	}
+
+	// 움직인 뒤에 머리가 꼬리에 닿았는지 체크하여 게임 오버 처리
+	for (auto& pTail : m_TailList)
+	{
+		// 각 오브젝트의 크기는 1로 고정이므로
+		// 두 오브젝트의 X, Y 거리가 모두 1 이내이면 겹쳐 있는 것이다.
+		if (m_X > pTail->GetX() - 0.5f &&
+			m_X < pTail->GetX() + 0.5f &&
+			m_Y < pTail->GetY() - 0.5f &&
+			m_Y > pTail->GetY() + 0.5f)
+		{
+			// 일단 충돌 시 바로 게임 종료 되도록 구현
+			GameManager::GetInstance().Shutdown();
+			return;
+			
+			// Q. 왜 종료가 안 될 까요...? 그냥 막 잘 가는데.....
+		}
 	}
 }
 
