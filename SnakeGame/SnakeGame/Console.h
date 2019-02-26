@@ -1,15 +1,15 @@
 #pragma once
 class Console
 {
-public: // ´Ù¸¥ µ¥¿¡¼­ È£ÃâÇÒ ¼ö ÀÖÀ½
-	//½Ì±ÛÅæ ÆÐÅÏ
-	//°ÔÀÓ ¸Å´ÏÀú °°Àº °ÍÀº °ø¿ëÀÌ¹Ç·Î ÇÏ³ª¸¸ ¸¸µé¾î¼­ ¿©±âÀú±â¼­ °®´Ù ¾µ ¼ö ÀÖ°ÔÇÔ
+public: // ë‹¤ë¥¸ ë°ì—ì„œ í˜¸ì¶œí•  ìˆ˜ ìžˆìŒ
+	//ì‹±ê¸€í†¤ íŒ¨í„´
+	//ê²Œìž„ ë§¤ë‹ˆì € ê°™ì€ ê²ƒì€ ê³µìš©ì´ë¯€ë¡œ í•˜ë‚˜ë§Œ ë§Œë“¤ì–´ì„œ ì—¬ê¸°ì €ê¸°ì„œ ê°–ë‹¤ ì“¸ ìˆ˜ ìžˆê²Œí•¨
 	static Console& GetInstance()
 	{
-		// Àü¿ª ÇÔ¼ö
-		// ¾îµð¼­µçÁö Å¬·¡½º¸¦ ÀÎ½ºÅÏ½ºÈ­ ÇÏÁö ¾Ê¾Æµµ ºÒ·¯¼­ »ç¿ëÀÌ °¡´É
-		// (¸â¹öÇÔ¼ö¸¦ È£ÃâÇÏ±â À§ÇÑ ÀÎ½ºÅÏ½º°¡ ÇÊ¿äÇÏÁö ¾ÊÀ½)
-		static Console instance; // static º¯¼ö´Â µ¥ÀÌÅÍ ¿µ¿ª¿¡ ÀúÀåµÇ±â ¶§¹®¿¡, ¾îµð¼­µç °¡Á®´Ù ¾µ ¼ö ÀÖÀ½. ¿©·¯ ¹ø ºÒ·Áµµ ÇÑ¹ø¸¸ »ý¼ºµÊ.
+		// ì „ì—­ í•¨ìˆ˜
+		// ì–´ë””ì„œë“ ì§€ í´ëž˜ìŠ¤ë¥¼ ì¸ìŠ¤í„´ìŠ¤í™” í•˜ì§€ ì•Šì•„ë„ ë¶ˆëŸ¬ì„œ ì‚¬ìš©ì´ ê°€ëŠ¥
+		// (ë©¤ë²„í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ê¸° ìœ„í•œ ì¸ìŠ¤í„´ìŠ¤ê°€ í•„ìš”í•˜ì§€ ì•ŠìŒ)
+		static Console instance; // static ë³€ìˆ˜ëŠ” ë°ì´í„° ì˜ì—­ì— ì €ìž¥ë˜ê¸° ë•Œë¬¸ì—, ì–´ë””ì„œë“  ê°€ì ¸ë‹¤ ì“¸ ìˆ˜ ìžˆìŒ. ì—¬ëŸ¬ ë²ˆ ë¶ˆë ¤ë„ í•œë²ˆë§Œ ìƒì„±ë¨.
 		return instance;
 	}
 
@@ -24,13 +24,13 @@ public:
 	void Clear();
 	void SwapBuffer();
 
-	// ¹®ÀÚ ¹× ¹®ÀÚ¿­ Ãâ·Â¿¡¼­ char, stringÀÌ ¾Æ´Ñ wchar_t, wstringÀ» ¾²´Â ÀÌÀ¯?
-	// ±âº» ¹®ÀÚ Å¸ÀÔÀ¸·Î´Â ÇÑ±Û/Æ¯¼ö±âÈ£¸¦ Ç¥ÇöÇÏ±â ¾î·Æ±â ¶§¹®
-	// charÀº ±âº»ÀûÀ¸·Î 1¹ÙÀÌÆ®¸¸À» ÀúÀå °¡´ÉÇÑµ¥, ÇÑ±Û/Æ¯¼ö±âÈ£´Â ÃÖ¼Ò 2¹ÙÀÌÆ®°¡ ÇÊ¿äÇÏ±â ¶§¹®
-	// 2¹ÙÀÌÆ® Å©±â·Î ÀúÀåµÇ´Â wchar_t (¿ÍÀÌµå Ä³¸¯ÅÍ Å¸ÀÔ)À» »ç¿ëÇØ¾ß ÇÏ³ªÀÇ ±ÛÀÚ¸¦ ¿ÂÀüÈ÷ Ç¥ÇöÇÒ ¼ö ÀÖÀ½
-	// wstringÀº ÀÌ·¯ÇÑ wchar_t¸¦ ÀÌ¿ëÇÏ´Â stringÀÎ °Í
-	// Âü°í·Î ÈçÈ÷ »ç¿ëÇÏ´Â 'À¯´ÏÄÚµå' ÀÎÄÚµù ¹æ¹ýÀÌ wchar_t¸¦ »ç¿ëÇÑ´Ù.
-	// ÀÚ¼¼È÷ ¾Ë°í ½Í´Ù¸é, MBCS(Multi Byte)¿Í WBCS(Wide Byte)ÀÇ Â÷ÀÌ¸¦ ±¸±Û¿¡°Ô ¹°¾îº¸ÀÚ!
+	// ë¬¸ìž ë° ë¬¸ìžì—´ ì¶œë ¥ì—ì„œ char, stringì´ ì•„ë‹Œ wchar_t, wstringì„ ì“°ëŠ” ì´ìœ ?
+	// ê¸°ë³¸ ë¬¸ìž íƒ€ìž…ìœ¼ë¡œëŠ” í•œê¸€/íŠ¹ìˆ˜ê¸°í˜¸ë¥¼ í‘œí˜„í•˜ê¸° ì–´ë µê¸° ë•Œë¬¸
+	// charì€ ê¸°ë³¸ì ìœ¼ë¡œ 1ë°”ì´íŠ¸ë§Œì„ ì €ìž¥ ê°€ëŠ¥í•œë°, í•œê¸€/íŠ¹ìˆ˜ê¸°í˜¸ëŠ” ìµœì†Œ 2ë°”ì´íŠ¸ê°€ í•„ìš”í•˜ê¸° ë•Œë¬¸
+	// 2ë°”ì´íŠ¸ í¬ê¸°ë¡œ ì €ìž¥ë˜ëŠ” wchar_t (ì™€ì´ë“œ ìºë¦­í„° íƒ€ìž…)ì„ ì‚¬ìš©í•´ì•¼ í•˜ë‚˜ì˜ ê¸€ìžë¥¼ ì˜¨ì „ížˆ í‘œí˜„í•  ìˆ˜ ìžˆìŒ
+	// wstringì€ ì´ëŸ¬í•œ wchar_të¥¼ ì´ìš©í•˜ëŠ” stringì¸ ê²ƒ
+	// ì°¸ê³ ë¡œ í”ížˆ ì‚¬ìš©í•˜ëŠ” 'ìœ ë‹ˆì½”ë“œ' ì¸ì½”ë”© ë°©ë²•ì´ wchar_të¥¼ ì‚¬ìš©í•œë‹¤.
+	// ìžì„¸ížˆ ì•Œê³  ì‹¶ë‹¤ë©´, MBCS(Multi Byte)ì™€ WBCS(Wide Byte)ì˜ ì°¨ì´ë¥¼ êµ¬ê¸€ì—ê²Œ ë¬¼ì–´ë³´ìž!
 	void Print(wchar_t _shape, short _x, short _y);
 	void PrintText(const std::wstring& _text, short _x, short _y);
 

@@ -4,11 +4,13 @@
 #include "Object.h"
 #include "RandomSpeedObj.h"
 #include "SnakeHead.h"
+#include "Apple.h"
 
-// »ý¼ºÀÚ, ¼Ò¸êÀÚ´Â ÀÌ¹Ì ¿ªÇÒÀÌ Á¤ÇØÁ® ÀÖ¾î¼­, ¹ÝÈ¯ Å¸ÀÔÀÌ ÇÊ¿ä ¾ø´Ù. (void ÀÌ·±°Å)
+// ìƒì„±ìž, ì†Œë©¸ìžëŠ” ì´ë¯¸ ì—­í• ì´ ì •í•´ì ¸ ìžˆì–´ì„œ, ë°˜í™˜ íƒ€ìž…ì´ í•„ìš” ì—†ë‹¤. (void ì´ëŸ°ê±°)
 GameManager::GameManager()
 	: m_IsOn(false)
 	, m_pSnakeHead(nullptr)
+	, m_pApple(nullptr)
 {
 }
 
@@ -25,47 +27,37 @@ void GameManager::Run()
 
 void GameManager::Shutdown()
 {
-	// °ÔÀÓÀ» OFF·Î ¸¸µé¾î¼­, ´ÙÀ½ ÇÁ·¹ÀÓ¿¡ ¸ÞÀÎ ·çÇÁ¿¡¼­ ºüÁ®³ª¿Àµµ·Ï ÇÑ´Ù.
+	// ê²Œìž„ì„ OFFë¡œ ë§Œë“¤ì–´ì„œ, ë‹¤ìŒ í”„ë ˆìž„ì— ë©”ì¸ ë£¨í”„ì—ì„œ ë¹ ì ¸ë‚˜ì˜¤ë„ë¡ í•œë‹¤.
 	m_IsOn = false;
 }
 
 void GameManager::Init()
 {
 	Console::GetInstance().Init();
-	// ·£´ý°ª »ç¿ëÀ» À§ÇØ ·£´ý½Ãµå¸¦ ÃÊ±âÈ­
-	// °ÔÀÓ ½ÃÀÛ ½Ã, µü ÇÑ¹ø¸¸ ÇØÁÖ¾î¾ß ÇÑ´Ù!
-	// ÀÌ ·£´ý ½Ãµå¸¦ ±â¹ÝÀ¸·Î ¾ÕÀ¸·Î ·£´ý °ªÀ» »êÃâÇÏ°Ô µÈ´Ù.
+	// ëžœë¤ê°’ ì‚¬ìš©ì„ ìœ„í•´ ëžœë¤ì‹œë“œë¥¼ ì´ˆê¸°í™”
+	// ê²Œìž„ ì‹œìž‘ ì‹œ, ë”± í•œë²ˆë§Œ í•´ì£¼ì–´ì•¼ í•œë‹¤!
+	// ì´ ëžœë¤ ì‹œë“œë¥¼ ê¸°ë°˜ìœ¼ë¡œ ì•žìœ¼ë¡œ ëžœë¤ ê°’ì„ ì‚°ì¶œí•˜ê²Œ ëœë‹¤.
 	srand((unsigned int)time(nullptr));
 
-	// Console °´Ã¼ÀÇ ÀÎ½ºÅÏ½º¸¦ °¡Á®¿Í¼­ consoleÀÌ¶ó´Â ÂüÁ¶º¯¼ö¿¡ ÀúÀåÇÏ¿© »ç¿ë
-	// ¸Å¹ø Console::GetInstance()¸¦ ½áÁÖ±â º¸´Ü ÀÌ·¸°Ô ÂüÁ¶º¯¼ö¸¦ ¾²¸é
-	// °¡µ¶¼º µî ¿©·¯ Ãø¸é¿¡¼­ Good
-	// auto Å°¿öµå´Â ´ëÀÔµÇ´Â Å¸ÀÔ°ú µ¿ÀÏÇÑ Å¸ÀÔÀ¸·Î ÀÚµ¿À¸·Î ¹Þ¾ÆÁÖ´Â ¿ªÇÒ
-	auto& console = Console::GetInstance();	//(µ¿ÀÏ) Console& console = Console::GetInstance();
+	// Console ê°ì²´ì˜ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ê°€ì ¸ì™€ì„œ consoleì´ë¼ëŠ” ì°¸ì¡°ë³€ìˆ˜ì— ì €ìž¥í•˜ì—¬ ì‚¬ìš©
+	// ë§¤ë²ˆ Console::GetInstance()ë¥¼ ì¨ì£¼ê¸° ë³´ë‹¨ ì´ë ‡ê²Œ ì°¸ì¡°ë³€ìˆ˜ë¥¼ ì“°ë©´
+	// ê°€ë…ì„± ë“± ì—¬ëŸ¬ ì¸¡ë©´ì—ì„œ Good
+	// auto í‚¤ì›Œë“œëŠ” ëŒ€ìž…ë˜ëŠ” íƒ€ìž…ê³¼ ë™ì¼í•œ íƒ€ìž…ìœ¼ë¡œ ìžë™ìœ¼ë¡œ ë°›ì•„ì£¼ëŠ” ì—­í• 
+	auto& console = Console::GetInstance();	//(ë™ì¼) Console& console = Console::GetInstance();
 	console.Init();
 
-	// 5°³ÀÇ object¸¦ »ý¼ºÇÏ¸é¼­ ¹Ù¿î´õ¸® ³»¿¡¼­ x, y ÁÂÇ¥¸¦ ¸Å¹ø ·£´ýÇÏ°Ô ÁöÁ¤
+	// ë™ì¼í•œ ê¸¸ì´ì— ëŒ€í•´ ì¸ê²Œìž„ ì¢Œí‘œë³´ë‹¤ cmd ì¢Œí‘œê°€ xê°’ì´ 2ë°°ì´ê¸° ë•Œë¬¸ì— 2ë¡œ ë‚˜ëˆ ì¤€ë‹¤.
 	RECT boundaryBox = console.GetBoundaryBox();
 	boundaryBox.right /= 2;
-	
-	// 2°³´Â ±âº» ¿ÀºêÁ§Æ®·Î »ý¼º
-	for (int i = 0; i < 2; i++)
-	{
-		Object* pObject = new Object();
-		pObject->SetShape(L'¡Ú'); // wchar_t·Î ¹Ù²î¾úÀ¸¹Ç·Î, L' '·Î ÇØÁà¾ß ÇÑ´Ù.
-		pObject->SetX(rand() % boundaryBox.right);
-		pObject->SetY(rand() % boundaryBox.bottom);
-		m_ObjectList.push_back(pObject);
-	}
 
-	// 3°³´Â Object¸¦ »ó¼Ó¹ÞÀº RandomSpeedObject¶ó´Â Å¬·¡½º·Î »ý¼º
-	// RandomSpeedObj´Â ObjectÀÇ ÀÚ½ÄÀÌ±â ¶§¹®¿¡ Object*¸¦ ´ã´Â ÀÚ·á±¸Á¶¿¡ °°ÀÌ º¸°ü °¡´É
+	// RandomSpeedObjëŠ” Objectë¥¼ ìƒì†ë°›ì€ ìžì‹ì´ê¸° ë•Œë¬¸ì— Object*ë¥¼ ë‹´ëŠ” ìžë£Œêµ¬ì¡°ì— ê°™ì´ ë³´ê´€ ê°€ëŠ¥
+	// RandomSpeedObjë¥¼ ìƒì„±í•˜ë©´ì„œ x, y ì¢Œí‘œë¥¼ ë°”ìš´ë”ë¦¬ ë‚´ì—ì„œ ë§¤ë²ˆ ëžœë¤í•˜ê²Œ ì§€ì •í•œë‹¤.
 	for (int i = 0; i < 3; ++i)
 	{
-        /// > ¾Æ·¡¿¡¼­ RandomSpeedObj()°¡ ¾Æ´Ï¶ó Object()·Î »ý¼ºÇÏ°í ÀÖ³×¿ä;¤±;
-		// ¾Æ¾Ñ! º¹ºÙÇÏ´Ù°¡ ¹Ù²ï°Í °°½À´Ï´ç @_@ ¹Ù²Ù¾î ³õÀ»°Ô¿©!!
+        /// > ì•„ëž˜ì—ì„œ RandomSpeedObj()ê°€ ì•„ë‹ˆë¼ Object()ë¡œ ìƒì„±í•˜ê³  ìžˆë„¤ìš”;ã…;
+		// ì•„ì•—! ë³µë¶™í•˜ë‹¤ê°€ ë°”ë€ê²ƒ ê°™ìŠµë‹ˆë‹¹ @_@ ë°”ê¾¸ì–´ ë†“ì„ê²Œì—¬!!
 		Object* pObject = new RandomSpeedObj();
-		pObject->SetShape(L'¢À'); // wchar_t·Î ¹Ù²î¾úÀ¸¹Ç·Î, L' '·Î ÇØÁà¾ß ÇÑ´Ù.
+		//pObject->SetShape(L'â™£'); // wchar_të¡œ ë°”ë€Œì—ˆìœ¼ë¯€ë¡œ, L' 'ë¡œ í•´ì¤˜ì•¼ í•œë‹¤.
 		pObject->SetX(rand() % boundaryBox.right);
 		pObject->SetY(rand() % boundaryBox.bottom);
 		m_ObjectList.push_back(pObject);
@@ -75,49 +67,55 @@ void GameManager::Init()
 	{
 		Object* pObject = new Object();
 		pObject->Init();
-		// [->] ±× ÁÖ¼Ò¿¡ ÀÖ´Â ³à¼®ÀÇ ¸â¹ö ÇÔ¼ö¸¦ ºÒ·¯¿Â´Ù (Æ÷ÀÎÅÍ)
-		// [.]Àº ÁÖ¼Ò¸¦ ¾Ë°í ÀÖ¾î¼­ °Á °¡Á®¿À´Â °Í
+		// [->] ê·¸ ì£¼ì†Œì— ìžˆëŠ” ë…€ì„ì˜ ë©¤ë²„ í•¨ìˆ˜ë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤ (í¬ì¸í„°)
+		// [.]ì€ ì£¼ì†Œë¥¼ ì•Œê³  ìžˆì–´ì„œ ê± ê°€ì ¸ì˜¤ëŠ” ê²ƒ
 		m_objectList.push_back(pObject);
 	}
 	*/
 
-	// Á÷Á¢ Á¶Á¾ÇÒ ¹ìÀÇ ¸Ó¸®¸¦ »ý¼ºÇÑ´Ù.
+	// ì§ì ‘ ì¡°ì¢…í•  ë±€ì˜ ë¨¸ë¦¬ë¥¼ ìƒì„±í•œë‹¤.
 	m_pSnakeHead = new SnakeHead();
-	m_pSnakeHead->SetShape(L'¢Ã');
-	m_pSnakeHead->SetX(boundaryBox.right / 2);  // Áß¾Ó¿¡ »ý¼º
-	m_pSnakeHead->SetY(boundaryBox.bottom / 2); // Áß¾Ó¿¡ »ý¼º
+	//m_pSnakeHead->SetShape(L'â–£');
+	m_pSnakeHead->SetX(boundaryBox.right / 2);  // ì¤‘ì•™ì— ìƒì„±
+	m_pSnakeHead->SetY(boundaryBox.bottom / 2); // ì¤‘ì•™ì— ìƒì„±
 	m_ObjectList.push_back(m_pSnakeHead);
 
-	// Q. ÀÌ»óÇÏ°Ô!!!!!!!!!!!!!!! Àß ¿òÁ÷ÀÌ´Ù°¡ ´Ù¸¥ ¿ÀºêÁ§Æ®¶û °°ÀÌ ¿òÁ÷ÀÌ´Âµ¥...
-	//    ¿Ö ±×·¯´Â °É±î¿ä?????????? @_@?????????????
-    /// > ¿ä°ÍÀº.. ºôµåÇØ¼­ Å×½ºÆ®ÇØºÁµµ ÀçÇöÀÌ ¾ÈµÇ´Â ±º¿ä...@_@
-    /// > º¸Åë °´Ã¼ÀÇ ÁÂÇ¥°¡ cmdÃ¢ÀÇ ¹üÀ§¸¦ ¹þ¾î³ª¸é ±×·± Çö»óÀÌ ¹ß»ýÇÏ´Âµ¥..
-    /// > Áö±Ý ÄÚµå¿¡¼± ¹®Á¦¾ø´Â µí ÇÑµ¥.. È¤½Ã ÀçÇöÀÌ µÇ°í °è½Å´Ù¸é ÀçÇö½ºÅÜÀ»...¾Ë·ÁÁÖ¼¼¿ä¤»¤»
-	// Á¦ ÄÄÇ»ÅÍ°¡ ÀÌ»óÇÑ °É±î¿ä.........? ¤¾¤¾¤¾¤¾¤¾¤¾
+	// Q. ì´ìƒí•˜ê²Œ!!!!!!!!!!!!!!! ìž˜ ì›€ì§ì´ë‹¤ê°€ ë‹¤ë¥¸ ì˜¤ë¸Œì íŠ¸ëž‘ ê°™ì´ ì›€ì§ì´ëŠ”ë°...
+	//    ì™œ ê·¸ëŸ¬ëŠ” ê±¸ê¹Œìš”?????????? @_@?????????????
+    /// > ìš”ê²ƒì€.. ë¹Œë“œí•´ì„œ í…ŒìŠ¤íŠ¸í•´ë´ë„ ìž¬í˜„ì´ ì•ˆë˜ëŠ” êµ°ìš”...@_@
+    /// > ë³´í†µ ê°ì²´ì˜ ì¢Œí‘œê°€ cmdì°½ì˜ ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ë©´ ê·¸ëŸ° í˜„ìƒì´ ë°œìƒí•˜ëŠ”ë°..
+    /// > ì§€ê¸ˆ ì½”ë“œì—ì„  ë¬¸ì œì—†ëŠ” ë“¯ í•œë°.. í˜¹ì‹œ ìž¬í˜„ì´ ë˜ê³  ê³„ì‹ ë‹¤ë©´ ìž¬í˜„ìŠ¤í…ì„...ì•Œë ¤ì£¼ì„¸ìš”ã…‹ã…‹
+	// ì œ ì»´í“¨í„°ê°€ ì´ìƒí•œ ê±¸ê¹Œìš”.........? ã…Žã…Žã…Žã…Žã…Žã…Ž
 
-	// ¸ðµç ÃÊ±âÈ­ ¿Ï·á µÇ¾úÀ¸¹Ç·Î °ÔÀÓ ON
+	// ë±€ì´ ë¨¹ì„ ì‚¬ê³¼ë¥¼ ìƒì„±í•œë‹¤.
+	m_pApple = new Apple();
+	m_pApple->SetX(rand() % boundaryBox.right);
+	m_pApple->SetY(rand() % boundaryBox.bottom);
+	m_ObjectList.push_back(m_pApple);
+
+	// ëª¨ë“  ì´ˆê¸°í™” ì™„ë£Œ ë˜ì—ˆìœ¼ë¯€ë¡œ ê²Œìž„ ON
 	m_IsOn = true;
 }
 
 void GameManager::Release()
 {
-	// ÇöÀç °ÔÀÓ°ú °ü·ÃµÈ ¸ðµç °´Ã¼µéÀ» Release
-	// º¸ÅëÀº Init()¿¡¼­ ÃÊ±âÈ­ ÇØÁØ °´Ã¼µéÀ» ¿©±â¼­ Release ÇØÁÖ¸é µÊ
-	// Heap ¸Þ¸ð¸®¿¡ New ÇØÁØ ¾ÖµéÀ» Delete ÇØÁÖ´Â ¿ªÇÒÀ» ÇÏ´Â °÷
-	// EX. °ÔÀÓÀ» ³¡³»°í ¸ÞÀÎ È­¸éÀ¸·Î µ¹¾Æ°¬À» ¶§ »ç¿ëÇß´ø °ÍµéÀ» Á¤¸®ÇÏ´Â ¿ªÇÒ
+	// í˜„ìž¬ ê²Œìž„ê³¼ ê´€ë ¨ëœ ëª¨ë“  ê°ì²´ë“¤ì„ Release
+	// ë³´í†µì€ Init()ì—ì„œ ì´ˆê¸°í™” í•´ì¤€ ê°ì²´ë“¤ì„ ì—¬ê¸°ì„œ Release í•´ì£¼ë©´ ë¨
+	// Heap ë©”ëª¨ë¦¬ì— New í•´ì¤€ ì• ë“¤ì„ Delete í•´ì£¼ëŠ” ì—­í• ì„ í•˜ëŠ” ê³³
+	// EX. ê²Œìž„ì„ ëë‚´ê³  ë©”ì¸ í™”ë©´ìœ¼ë¡œ ëŒì•„ê°”ì„ ë•Œ ì‚¬ìš©í–ˆë˜ ê²ƒë“¤ì„ ì •ë¦¬í•˜ëŠ” ì—­í• 
 	Console::GetInstance().Release();
 
-	// ¸Þ¸ð¸® ¸¯À» ÁÙÀÌ·Á¸é, ¹º°¡ ¿ÀºêÁ§Æ® ¸¸µé¾î¼­ ÇØ³õ°í ¹Ù·Î ¸±¸®Áî·Î ¿Í¼­ delete ÇØÁÖ´Â °ÍÀÌ ÁÁÀ½. ¾È ±î¸Ô°Ô
-	// m_ObjectList¶ó´Â ÀÚ·á±¸Á¶¿¡¼­ ±× ÀúÀåµÈ µ¥ÀÌÅÍ¸¦ ÀúÀåµÈ¸¸Å­ ÇÏ³ª¾¿ °¡Á®¿À´Â ¹Ýº¹¹®
-	for (auto& pObject : m_ObjectList) // ÇöÀç´Â 5°³ º¸°üÁßÀÌ¹Ç·Î 5¹ø ½ÇÇàµÊ
+	// ë©”ëª¨ë¦¬ ë¦­ì„ ì¤„ì´ë ¤ë©´, ë­”ê°€ ì˜¤ë¸Œì íŠ¸ ë§Œë“¤ì–´ì„œ í•´ë†“ê³  ë°”ë¡œ ë¦´ë¦¬ì¦ˆë¡œ ì™€ì„œ delete í•´ì£¼ëŠ” ê²ƒì´ ì¢‹ìŒ. ì•ˆ ê¹Œë¨¹ê²Œ
+	// m_ObjectListë¼ëŠ” ìžë£Œêµ¬ì¡°ì—ì„œ ê·¸ ì €ìž¥ëœ ë°ì´í„°ë¥¼ ì €ìž¥ëœë§Œí¼ í•˜ë‚˜ì”© ê°€ì ¸ì˜¤ëŠ” ë°˜ë³µë¬¸
+	for (auto& pObject : m_ObjectList) // í˜„ìž¬ëŠ” 5ê°œ ë³´ê´€ì¤‘ì´ë¯€ë¡œ 5ë²ˆ ì‹¤í–‰ë¨
 	{
-		// pObject->Release(); // °¡Á®¿Â µ¥ÀÌÅÍ(pObject)¿¡ ´ëÇØ Release() È£Ãâ
-		delete pObject; //ÇöÀç °¡Á®¿Â µ¥ÀÌÅÍ(pObject)¸¦ delete ÇÏ¿© ¸Þ¸ð¸® ÇÒ´ç ÇØÁ¦
-		// ÇØ´ç ÀÎ½ºÅÏ½º¸¦ deleteÇÏ¿© ¸Þ¸ð¸® ÇÒ´ç ÇØÁ¦
+		// pObject->Release(); // ê°€ì ¸ì˜¨ ë°ì´í„°(pObject)ì— ëŒ€í•´ Release() í˜¸ì¶œ
+		delete pObject; //í˜„ìž¬ ê°€ì ¸ì˜¨ ë°ì´í„°(pObject)ë¥¼ delete í•˜ì—¬ ë©”ëª¨ë¦¬ í• ë‹¹ í•´ì œ
+		// í•´ë‹¹ ì¸ìŠ¤í„´ìŠ¤ë¥¼ deleteí•˜ì—¬ ë©”ëª¨ë¦¬ í• ë‹¹ í•´ì œ
 	}
 
-	// º¸°üÁßÀÌ´ø ¸ðµç Æ÷ÀÎÅÍµéÀÌ ±× °¡¸®Å°´ø ÀÎ½ºÅÏ½ºµéÀ» ´Ù ÇÒ´ç ÇØÁ¦ÇßÀ¸¹Ç·Î
-	// m_ObjectList¸¦ ºñ¿öÁØ´Ù. ¾ÈÇÏ¸é ÁÖÀÎ¾ø´Â Æ÷ÀÎÅÍµéÀ» °¡Áö°í ÀÖ°Ô µÈ´Ù. (¸Þ¸ð¸® ¸¯)
+	// ë³´ê´€ì¤‘ì´ë˜ ëª¨ë“  í¬ì¸í„°ë“¤ì´ ê·¸ ê°€ë¦¬í‚¤ë˜ ì¸ìŠ¤í„´ìŠ¤ë“¤ì„ ë‹¤ í• ë‹¹ í•´ì œí–ˆìœ¼ë¯€ë¡œ
+	// m_ObjectListë¥¼ ë¹„ì›Œì¤€ë‹¤. ì•ˆí•˜ë©´ ì£¼ì¸ì—†ëŠ” í¬ì¸í„°ë“¤ì„ ê°€ì§€ê³  ìžˆê²Œ ëœë‹¤. (ë©”ëª¨ë¦¬ ë¦­)
 	m_ObjectList.clear();
 }
 
@@ -125,83 +123,97 @@ void GameManager::MainLoop()
 {
 	while (m_IsOn)
 	{
-		// ÇÑ ÇÁ·¹ÀÓ¸¶´Ù ¾÷µ¥ÀÌÆ®, ·£´õ¸µ ÁøÇà
+		// í•œ í”„ë ˆìž„ë§ˆë‹¤ ì—…ë°ì´íŠ¸, ëžœë”ë§ ì§„í–‰
 		Update();
 		Render();
 
-		// Sleep()ÇÔ¼ö´Â ÀÎÀÚ·Î ¹ÞÀº ¼öÄ¡¸¸Å­(¹Ð¸®¼¼ÄÁµå ´ÜÀ§) ÇÁ·Î±×·¥À» Á¤Áö½ÃÅ²´Ù.
-		// ¸ÞÀÎ ·çÇÁ°¡ ³Ê¹« »¡¸® µ¹¸é È­¸éÀ» ¾Ë¾Æº¸±â Èûµé±â ¶§¹®¿¡, 0.03ÃÊ¸¶´Ù ÇÑ ÇÁ·¹ÀÓ¾¿ ¼öÇàµÇµµ·Ï
-		// (1ÃÊ¿¡ 33¹ø ÇÁ·¹ÀÓÀÌ µ¹°Ô µÇ¹Ç·Î, 33ÇÁ·¹ÀÓÀÇ °ÔÀÓ)
-		// (Âü°í·Î º¸Åë »ó¿ë °ÔÀÓÀº Update¿Í RenderÀÇ ÇÁ·¹ÀÓÀ» ºÐ¸®ÇÏ¿©,
-		//  ·»´õ´Â 60ÇÁ·¹ÀÓ °íÁ¤, ¾÷µ¥ÀÌÆ®´Â ¼ö¹é~¼öÃµ ÇÁ·¹ÀÓÀ¸·Î µ¹°Ô ÇØ³õ´Â´Ù.)
+		// Sleep()í•¨ìˆ˜ëŠ” ì¸ìžë¡œ ë°›ì€ ìˆ˜ì¹˜ë§Œí¼(ë°€ë¦¬ì„¸ì»¨ë“œ ë‹¨ìœ„) í”„ë¡œê·¸ëž¨ì„ ì •ì§€ì‹œí‚¨ë‹¤.
+		// ë©”ì¸ ë£¨í”„ê°€ ë„ˆë¬´ ë¹¨ë¦¬ ëŒë©´ í™”ë©´ì„ ì•Œì•„ë³´ê¸° íž˜ë“¤ê¸° ë•Œë¬¸ì—, 0.03ì´ˆë§ˆë‹¤ í•œ í”„ë ˆìž„ì”© ìˆ˜í–‰ë˜ë„ë¡
+		// (1ì´ˆì— 33ë²ˆ í”„ë ˆìž„ì´ ëŒê²Œ ë˜ë¯€ë¡œ, 33í”„ë ˆìž„ì˜ ê²Œìž„)
+		// (ì°¸ê³ ë¡œ ë³´í†µ ìƒìš© ê²Œìž„ì€ Updateì™€ Renderì˜ í”„ë ˆìž„ì„ ë¶„ë¦¬í•˜ì—¬,
+		//  ë Œë”ëŠ” 60í”„ë ˆìž„ ê³ ì •, ì—…ë°ì´íŠ¸ëŠ” ìˆ˜ë°±~ìˆ˜ì²œ í”„ë ˆìž„ìœ¼ë¡œ ëŒê²Œ í•´ë†“ëŠ”ë‹¤.)
 		Sleep(30);
 	}
 }
 
 void GameManager::Update()
 {
-	// °¡Àå ¸ÕÀú Å° ÀÔ·Â¿¡ ´ëÇÑ Ã³¸®¸¦ ÇÑ´Ù.
+	// ê°€ìž¥ ë¨¼ì € í‚¤ ìž…ë ¥ì— ëŒ€í•œ ì²˜ë¦¬ë¥¼ í•œë‹¤.
 	KeyInputHandling();
 
-	// °ÔÀÓÀÌ °¡Áö°í ÀÖ´Â ¸ðµç °´Ã¼µé¿¡°Ô °¢ÀÚ ÀÚ½ÅÀ» ¾÷µ¥ÀÌÆ® ÇÏµµ·Ï Update()¸¦ È£Ãâ
+	// ê²Œìž„ì´ ê°€ì§€ê³  ìžˆëŠ” ëª¨ë“  ê°ì²´ë“¤ì—ê²Œ ê°ìž ìžì‹ ì„ ì—…ë°ì´íŠ¸ í•˜ë„ë¡ Update()ë¥¼ í˜¸ì¶œ
 	for (auto& pObject : m_ObjectList)
 	{
 		pObject->Update();
+	}
+
+	// ë±€ì´ ì‚¬ê³¼ë¥¼ ë¨¹ìœ¼ë©´ ë±€ì— ê¼¬ë¦¬ë¥¼ ì¶”ê°€í•´ì£¼ê³  ì‚¬ê³¼ë¥¼ ë‹¤ë¥¸ ê³³ìœ¼ë¡œ ì˜®ê¸´ë‹¤.
+	if (m_pSnakeHead->GetX() > m_pApple->GetX() - 0.5f &&
+		m_pSnakeHead->GetX() < m_pApple->GetX() + 0.5f &&
+		m_pSnakeHead->GetY() > m_pApple->GetY() - 0.5f &&
+		m_pSnakeHead->GetY() < m_pApple->GetY() + 0.5f)
+	{
+		m_pSnakeHead->AddTail();
+
+		RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
+		boundaryBox.right /= 2;
+		m_pApple->SetX(rand() % boundaryBox.right);
+		m_pApple->SetY(rand() % boundaryBox.bottom);
 	}
 }
 
 void GameManager::Render()
 {
-	// ·»´õ¸µÀ» ½ÃÀÛÇÏ±â Àü, ¹é¹öÆÛ¸¦ ¸ÕÀú ±ú²ýÇÏ°Ô Áö¿î´Ù.
-	// Q. ¾È Áö¿ì¸é ÀÌÀü²¨¶û °ãÃÄ¼­ ³ª¿À°Ô µÇ³ª¿ä?
-    /// > ³Ü. Clear()¸¦ ¾ÈÇÏ¸é ÀÌÀü ÇÁ·¹ÀÓ¿¡ ±×·ÁÁ³´ø ³»¿ë¿¡ Ãß°¡·Î ±×¸®°Ô µË´Ï´Ù.
-    /// > Áï, ÀÌÀü²¨¶û °ãÃÄ¼­ È­¸é¿¡ Ç¥½ÃµË´Ï´Ù.
+	// ë Œë”ë§ì„ ì‹œìž‘í•˜ê¸° ì „, ë°±ë²„í¼ë¥¼ ë¨¼ì € ê¹¨ë—í•˜ê²Œ ì§€ìš´ë‹¤.
+	// Q. ì•ˆ ì§€ìš°ë©´ ì´ì „êº¼ëž‘ ê²¹ì³ì„œ ë‚˜ì˜¤ê²Œ ë˜ë‚˜ìš”?
+    /// > ë„µ. Clear()ë¥¼ ì•ˆí•˜ë©´ ì´ì „ í”„ë ˆìž„ì— ê·¸ë ¤ì¡Œë˜ ë‚´ìš©ì— ì¶”ê°€ë¡œ ê·¸ë¦¬ê²Œ ë©ë‹ˆë‹¤.
+    /// > ì¦‰, ì´ì „êº¼ëž‘ ê²¹ì³ì„œ í™”ë©´ì— í‘œì‹œë©ë‹ˆë‹¤.
 	auto& console = Console::GetInstance();
 	console.Clear();
 
-	// ºó µµÈ­Áö »óÅÂÀÇ ¹é¹öÆÛ¿¡ ÀÌ¹ø ÇÁ·¹ÀÓ¿¡ ±×·ÁÁú °´Ã¼ ·»´õ¸µ ¼öÇà
+	// ë¹ˆ ë„í™”ì§€ ìƒíƒœì˜ ë°±ë²„í¼ì— ì´ë²ˆ í”„ë ˆìž„ì— ê·¸ë ¤ì§ˆ ê°ì²´ ë Œë”ë§ ìˆ˜í–‰
 	for (auto& pObject : m_ObjectList)
 	{
 		pObject->Render();
 	}
 
-	// ¸ðµç °´Ã¼ÀÇ ·£´õ¸µÀÌ ³¡³ª¸é, ¹é¹öÆÛ¿Í ½ºÅ©¸°¹öÆÛ¸¦ ±³Ã¼ÇÏ¿©
-	// È­¸é¿¡ ¹Ù²ï ·»´õ¸µ ³»¿ëÀÌ ÇÑ¹ø¿¡ Ç¥½ÃµÇµµ·Ï ÇÑ´Ù.
+	// ëª¨ë“  ê°ì²´ì˜ ëžœë”ë§ì´ ëë‚˜ë©´, ë°±ë²„í¼ì™€ ìŠ¤í¬ë¦°ë²„í¼ë¥¼ êµì²´í•˜ì—¬
+	// í™”ë©´ì— ë°”ë€ ë Œë”ë§ ë‚´ìš©ì´ í•œë²ˆì— í‘œì‹œë˜ë„ë¡ í•œë‹¤.
 	console.SwapBuffer();
 }
 
 void GameManager::KeyInputHandling()
 {
-	// GetAsyncKeyState()ÇÔ¼ö´Â ÇöÀç Å°º¸µåÀÇ Æ¯Á¤ Å°ÀÇ ´­¸° »óÅÂ¸¦ ¹ÝÈ¯ÇÑ´Ù.
-	// ¾î¶² Å°¸¦ È®ÀÎÇÒÁö´Â ÀÎÀÚ·Î ¹ÞÀ¸¸ç, VK_ ·Î ½ÃÀÛÇÏ´Â ¸ÅÅ©·Î°ªÀ¸·Î Á¤ÇØÁ®ÀÖ´Ù.
-	// Å°°ª Á¾·ù Âü°í: https://docs.microsoft.com/ko-kr/windows/desktop/inputdev/virtual-key-codes
-	// ¹ÝÈ¯°ªÀº Å°ÀÇ ´­¸° »óÅÂ¿¡ ´ëÇÑ ÇÃ·¡±×°ªÀÌ¸ç, shortÅ¸ÀÔ(2byte)¿¡¼­ ¿ÞÂÊ³¡°ú ¿À¸¥ÂÊ³¡ ºñÆ®¸¦ ºñÆ®ÇÃ·¡±×·Î »ç¿ëÇÑ´Ù.
-	// ÇöÀç Å°°¡ ´­·ÁÀÖ´ÂÁö¸¦ ¿ÞÂÊ³¡ ºñÆ®·Î ¾Ë·ÁÁÖ°í, ÀÌÀü¿¡ ´­¸°Àû ÀÖ¾ú´ÂÁö¸¦ ¿À¸¥ÂÊ³¡ ºñÆ®·Î ¾Ë·ÁÁØ´Ù.
-	// Áï, ÃÑ 4°¡ÁöÀÇ ÄÉÀÌ½º°¡ Á¸ÀçÇÑ´Ù.
-	// 1. 0000 0000 0000 0000 = 0x0000 : ÀÌÀü¿¡ ´©¸¥ ÀûÀÌ ¾ø°í È£Ãâ ½ÃÁ¡¿¡¼­ ¾È´­¸° »óÅÂ
-	// 2. 1000 0000 0000 0000 = 0x8000 : ÀÌÀü¿¡ ´©¸¥ ÀûÀÌ ¾ø°í È£Ãâ ½ÃÁ¡¿¡¼­ ´­¸° »óÅÂ
-	// 3. 0000 0000 0000 0001 = 0x0001 : ÀÌÀü¿¡ ´©¸¥ ÀûÀÌ ÀÖ°í È£Ãâ ½ÃÁ¡¿¡¼­ ¾È´­¸° »óÅÂ
-	// 4. 1000 0000 0000 0001 = 0x8001 : ÀÌÀü¿¡ ´©¸¥ ÀûÀÌ ÀÖ°í È£Ãâ ½ÃÁ¡¿¡¼­ ´­¸° »óÅÂ
-	// ÀÌ¸¦ ÅëÇØ Å°°¡ Çö½ÃÁ¡¿¡¼­ Ã³À½ ´­·È´ÂÁö, ¾Æ´Ï¸é ´©¸£°í ÀÖ´Â »óÅÂ¿´´ÂÁö µîÀ» Ã¼Å©ÇÒ ¼ö ÀÖÁö¸¸,
-	// »ç½Ç ÀÏ¹ÝÀûÀ¸·Î ÀÌ·¯ÇÑ ±¸ºÐ±îÁö´Â ÇÊ¿ä¾ø°í, Å°°¡ Áö±Ý ´­·ÁÀÖ´ÂÁö ¿©ºÎ¸¸ ¾Ë¸é µÇ±â ¶§¹®¿¡
-	// ¾Æ·¡¿Í °°ÀÌ 0x8000 ÇÃ·¡±×°¡ ÀÖ´ÂÁö¸¦ ºñÆ®¿¬»êÇÏ¿© Å°ÀÇ ´­¸²¿©ºÎ¸¦ È®ÀÎÇÑ´Ù. (Áï, À§ÀÇ 2, 4¹ø ÄÉÀÌ½º¸¦ ¸ðµÎ trueÃ³¸®)
+	// GetAsyncKeyState()í•¨ìˆ˜ëŠ” í˜„ìž¬ í‚¤ë³´ë“œì˜ íŠ¹ì • í‚¤ì˜ ëˆŒë¦° ìƒíƒœë¥¼ ë°˜í™˜í•œë‹¤.
+	// ì–´ë–¤ í‚¤ë¥¼ í™•ì¸í• ì§€ëŠ” ì¸ìžë¡œ ë°›ìœ¼ë©°, VK_ ë¡œ ì‹œìž‘í•˜ëŠ” ë§¤í¬ë¡œê°’ìœ¼ë¡œ ì •í•´ì ¸ìžˆë‹¤.
+	// í‚¤ê°’ ì¢…ë¥˜ ì°¸ê³ : https://docs.microsoft.com/ko-kr/windows/desktop/inputdev/virtual-key-codes
+	// ë°˜í™˜ê°’ì€ í‚¤ì˜ ëˆŒë¦° ìƒíƒœì— ëŒ€í•œ í”Œëž˜ê·¸ê°’ì´ë©°, shortíƒ€ìž…(2byte)ì—ì„œ ì™¼ìª½ëê³¼ ì˜¤ë¥¸ìª½ë ë¹„íŠ¸ë¥¼ ë¹„íŠ¸í”Œëž˜ê·¸ë¡œ ì‚¬ìš©í•œë‹¤.
+	// í˜„ìž¬ í‚¤ê°€ ëˆŒë ¤ìžˆëŠ”ì§€ë¥¼ ì™¼ìª½ë ë¹„íŠ¸ë¡œ ì•Œë ¤ì£¼ê³ , ì´ì „ì— ëˆŒë¦°ì  ìžˆì—ˆëŠ”ì§€ë¥¼ ì˜¤ë¥¸ìª½ë ë¹„íŠ¸ë¡œ ì•Œë ¤ì¤€ë‹¤.
+	// ì¦‰, ì´ 4ê°€ì§€ì˜ ì¼€ì´ìŠ¤ê°€ ì¡´ìž¬í•œë‹¤.
+	// 1. 0000 0000 0000 0000 = 0x0000 : ì´ì „ì— ëˆ„ë¥¸ ì ì´ ì—†ê³  í˜¸ì¶œ ì‹œì ì—ì„œ ì•ˆëˆŒë¦° ìƒíƒœ
+	// 2. 1000 0000 0000 0000 = 0x8000 : ì´ì „ì— ëˆ„ë¥¸ ì ì´ ì—†ê³  í˜¸ì¶œ ì‹œì ì—ì„œ ëˆŒë¦° ìƒíƒœ
+	// 3. 0000 0000 0000 0001 = 0x0001 : ì´ì „ì— ëˆ„ë¥¸ ì ì´ ìžˆê³  í˜¸ì¶œ ì‹œì ì—ì„œ ì•ˆëˆŒë¦° ìƒíƒœ
+	// 4. 1000 0000 0000 0001 = 0x8001 : ì´ì „ì— ëˆ„ë¥¸ ì ì´ ìžˆê³  í˜¸ì¶œ ì‹œì ì—ì„œ ëˆŒë¦° ìƒíƒœ
+	// ì´ë¥¼ í†µí•´ í‚¤ê°€ í˜„ì‹œì ì—ì„œ ì²˜ìŒ ëˆŒë ¸ëŠ”ì§€, ì•„ë‹ˆë©´ ëˆ„ë¥´ê³  ìžˆëŠ” ìƒíƒœì˜€ëŠ”ì§€ ë“±ì„ ì²´í¬í•  ìˆ˜ ìžˆì§€ë§Œ,
+	// ì‚¬ì‹¤ ì¼ë°˜ì ìœ¼ë¡œ ì´ëŸ¬í•œ êµ¬ë¶„ê¹Œì§€ëŠ” í•„ìš”ì—†ê³ , í‚¤ê°€ ì§€ê¸ˆ ëˆŒë ¤ìžˆëŠ”ì§€ ì—¬ë¶€ë§Œ ì•Œë©´ ë˜ê¸° ë•Œë¬¸ì—
+	// ì•„ëž˜ì™€ ê°™ì´ 0x8000 í”Œëž˜ê·¸ê°€ ìžˆëŠ”ì§€ë¥¼ ë¹„íŠ¸ì—°ì‚°í•˜ì—¬ í‚¤ì˜ ëˆŒë¦¼ì—¬ë¶€ë¥¼ í™•ì¸í•œë‹¤. (ì¦‰, ìœ„ì˜ 2, 4ë²ˆ ì¼€ì´ìŠ¤ë¥¼ ëª¨ë‘ trueì²˜ë¦¬)
 
-	// ESC Å° ÀÔ·Â Ã³¸®
+	// ESC í‚¤ ìž…ë ¥ ì²˜ë¦¬
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 	{
-		// ÇÁ·Î±×·¥ Á¾·á
+		// í”„ë¡œê·¸ëž¨ ì¢…ë£Œ
 		Shutdown();
 	}
-	// ESC Å° ÀÔ·Â Ã³¸® ³¡
+	// ESC í‚¤ ìž…ë ¥ ì²˜ë¦¬ ë
 
-	// ¹æÇâÅ° ÀÔ·Â Ã³¸®
-	// else if·Î ¾È ¾´ ÀÌÀ¯´Â ¿©·¯ Å°°¡ °°ÀÌ ´­·ÈÀ» ¶§¸¦ Ã³¸®ÇØÁÖ±â À§ÇØ¼­
+	// ë°©í–¥í‚¤ ìž…ë ¥ ì²˜ë¦¬
+	// else ifë¡œ ì•ˆ ì“´ ì´ìœ ëŠ” ì—¬ëŸ¬ í‚¤ê°€ ê°™ì´ ëˆŒë ¸ì„ ë•Œë¥¼ ì²˜ë¦¬í•´ì£¼ê¸° ìœ„í•´ì„œ
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
-		// °¢ Å° ÀÔ·Â¿¡ ´ëÇÑ Ã³¸®´Â °¢ Å¬·¡½ºÀÇ ÇÚµé·¯¿¡¼­ ±¸ÇöÇÏµµ·Ï ³Ñ°ÜÁØ´Ù.
-		// ±×·¡¾ß ¸ÞÀÎ·ÎÁ÷ÀÌ ±ò²û ÇØÁö°í, ÀÌÈÄ ÀÛ¾÷ÇÏ±â ÆíÇØÁø´Ù.
+		// ê° í‚¤ ìž…ë ¥ì— ëŒ€í•œ ì²˜ë¦¬ëŠ” ê° í´ëž˜ìŠ¤ì˜ í•¸ë“¤ëŸ¬ì—ì„œ êµ¬í˜„í•˜ë„ë¡ ë„˜ê²¨ì¤€ë‹¤.
+		// ê·¸ëž˜ì•¼ ë©”ì¸ë¡œì§ì´ ê¹”ë” í•´ì§€ê³ , ì´í›„ ìž‘ì—…í•˜ê¸° íŽ¸í•´ì§„ë‹¤.
 		m_pSnakeHead->OnKeyPress(VK_UP);
-		// ³ªÁß¿¡ SnakeHead¸»°íµµ Å°ÀÔ·ÂÀ» ¹ÞÀ» ´ë»óÀÌ »ý±â¸é ¿©±â¿¡ Ãß°¡
+		// ë‚˜ì¤‘ì— SnakeHeadë§ê³ ë„ í‚¤ìž…ë ¥ì„ ë°›ì„ ëŒ€ìƒì´ ìƒê¸°ë©´ ì—¬ê¸°ì— ì¶”ê°€
 	}
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 	{
@@ -215,9 +227,9 @@ void GameManager::KeyInputHandling()
 	{
 		m_pSnakeHead->OnKeyPress(VK_RIGHT);
 	}
-	// ¹æÇâÅ° ÀÔ·Â Ã³¸® ³¡
+	// ë°©í–¥í‚¤ ìž…ë ¥ ì²˜ë¦¬ ë
 
-	// ¿µ¹®ÀÚÅ°´Â ÇØ´ç ¹®ÀÚ Ä³¸¯ÅÍ(char)ÀÇ ¹ÙÀÌÆ®°ª°ú ´ëÀÀµÈ´Ù.
+	// ì˜ë¬¸ìží‚¤ëŠ” í•´ë‹¹ ë¬¸ìž ìºë¦­í„°(char)ì˜ ë°”ì´íŠ¸ê°’ê³¼ ëŒ€ì‘ëœë‹¤.
 	if (GetAsyncKeyState('Z') & 0x8000)
 	{
 		m_pSnakeHead->OnKeyPress('Z');
@@ -226,5 +238,5 @@ void GameManager::KeyInputHandling()
 	{
 		m_pSnakeHead->OnKeyPress('X');
 	}
-	// ¿µ¹®ÀÚÅ° ÀÔ·Â Ã³¸® ³¡
+	// ì˜ë¬¸ìží‚¤ ìž…ë ¥ ì²˜ë¦¬ ë
 }

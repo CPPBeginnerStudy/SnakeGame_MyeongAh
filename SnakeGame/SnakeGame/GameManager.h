@@ -1,18 +1,19 @@
 #pragma once
 class Object;
 class SnakeHead;
+class Apple;
 
 class GameManager
 {
-public: // ´Ù¸¥ µ¥¿¡¼­ È£ÃâÇÒ ¼ö ÀÖÀ½
-	//½Ì±ÛÅæ ÆÐÅÏ
-	//°ÔÀÓ ¸Å´ÏÀú °°Àº °ÍÀº °ø¿ëÀÌ¹Ç·Î ÇÏ³ª¸¸ ¸¸µé¾î¼­ ¿©±âÀú±â¼­ °®´Ù ¾µ ¼ö ÀÖ°ÔÇÔ
+public: // ë‹¤ë¥¸ ë°ì—ì„œ í˜¸ì¶œí•  ìˆ˜ ìžˆìŒ
+	//ì‹±ê¸€í†¤ íŒ¨í„´
+	//ê²Œìž„ ë§¤ë‹ˆì € ê°™ì€ ê²ƒì€ ê³µìš©ì´ë¯€ë¡œ í•˜ë‚˜ë§Œ ë§Œë“¤ì–´ì„œ ì—¬ê¸°ì €ê¸°ì„œ ê°–ë‹¤ ì“¸ ìˆ˜ ìžˆê²Œí•¨
 	static GameManager& GetInstance()
 	{
-		// Àü¿ª ÇÔ¼ö
-		// ¾îµð¼­µçÁö Å¬·¡½º¸¦ ÀÎ½ºÅÏ½ºÈ­ ÇÏÁö ¾Ê¾Æµµ ºÒ·¯¼­ »ç¿ëÀÌ °¡´É
-		// (¸â¹öÇÔ¼ö¸¦ È£ÃâÇÏ±â À§ÇÑ ÀÎ½ºÅÏ½º°¡ ÇÊ¿äÇÏÁö ¾ÊÀ½)
-		static GameManager instance; // static º¯¼ö´Â µ¥ÀÌÅÍ ¿µ¿ª¿¡ ÀúÀåµÇ±â ¶§¹®¿¡, ¾îµð¼­µç °¡Á®´Ù ¾µ ¼ö ÀÖÀ½. ¿©·¯ ¹ø ºÒ·Áµµ ÇÑ¹ø¸¸ »ý¼ºµÊ.
+		// ì „ì—­ í•¨ìˆ˜
+		// ì–´ë””ì„œë“ ì§€ í´ëž˜ìŠ¤ë¥¼ ì¸ìŠ¤í„´ìŠ¤í™” í•˜ì§€ ì•Šì•„ë„ ë¶ˆëŸ¬ì„œ ì‚¬ìš©ì´ ê°€ëŠ¥
+		// (ë©¤ë²„í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ê¸° ìœ„í•œ ì¸ìŠ¤í„´ìŠ¤ê°€ í•„ìš”í•˜ì§€ ì•ŠìŒ)
+		static GameManager instance; // static ë³€ìˆ˜ëŠ” ë°ì´í„° ì˜ì—­ì— ì €ìž¥ë˜ê¸° ë•Œë¬¸ì—, ì–´ë””ì„œë“  ê°€ì ¸ë‹¤ ì“¸ ìˆ˜ ìžˆìŒ. ì—¬ëŸ¬ ë²ˆ ë¶ˆë ¤ë„ í•œë²ˆë§Œ ìƒì„±ë¨.
 		return instance;
 	}
 	
@@ -24,7 +25,7 @@ public:
 	void Run();
 	void Shutdown();
 
-private: // Å¬·¡½º ³»¿¡¼­¸¸ È£ÃâÇÒ ¼ö ÀÖÀ½
+private: // í´ëž˜ìŠ¤ ë‚´ì—ì„œë§Œ í˜¸ì¶œí•  ìˆ˜ ìžˆìŒ
 	void Init();
 	void Release();
 	void MainLoop();
@@ -37,11 +38,12 @@ private: // Å¬·¡½º ³»¿¡¼­¸¸ È£ÃâÇÒ ¼ö ÀÖÀ½
 private:
 	bool m_IsOn;
 	std::list<Object*> m_ObjectList;
-	// ÇÑ ÇÁ·¹ÀÓ¸¶´Ù ¿òÁ÷¿©¾ß ÇÒ ¿ÀºêÁ§Æ®¸¦ Ã£¾Æ°¥ ¼ö ÀÖµµ·Ï Èü¸Þ¸ð¸®¿¡ ÀúÀåµÉ ¿ÀºêÁ§Æ®ÀÇ ÁÖ¼Ò¸¦ ÀúÀåÇÏ´Â ¸®½ºÆ®
+	// í•œ í”„ë ˆìž„ë§ˆë‹¤ ì›€ì§ì—¬ì•¼ í•  ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ì•„ê°ˆ ìˆ˜ ìžˆë„ë¡ íž™ë©”ëª¨ë¦¬ì— ì €ìž¥ë  ì˜¤ë¸Œì íŠ¸ì˜ ì£¼ì†Œë¥¼ ì €ìž¥í•˜ëŠ” ë¦¬ìŠ¤íŠ¸
 
-	// Æ÷ÀÎÅÍ º¯¼öÀÇ ÀÌ¸§ ¾Õ¿¡ p¸¦ ºÙ¿©ÁÖ´Â ³×ÀÌ¹Ö °ü½ÀÀÌ ÀÖ´Ù.
-	SnakeHead* m_pSnakeHead;
+	// í¬ì¸í„° ë³€ìˆ˜ì˜ ì´ë¦„ ì•žì— pë¥¼ ë¶™ì—¬ì£¼ëŠ” ë„¤ì´ë° ê´€ìŠµì´ ìžˆë‹¤.
+	SnakeHead*	m_pSnakeHead;
+	Apple*		m_pApple;
 };
 
-// ¸â¹ö º¯¼ö¿¡´Â m_´ë¹®ÀÚ·Î ½ÃÀÛ
-// ÇÔ¼ö¸íÀº ´ë¹®ÀÚ·Î ½ÃÀÛ
+// ë©¤ë²„ ë³€ìˆ˜ì—ëŠ” m_ëŒ€ë¬¸ìžë¡œ ì‹œìž‘
+// í•¨ìˆ˜ëª…ì€ ëŒ€ë¬¸ìžë¡œ ì‹œìž‘

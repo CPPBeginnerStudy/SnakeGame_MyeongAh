@@ -3,17 +3,17 @@
 #include "Console.h"
 
 
-// »ó¼Ó¹ÞÀº Å¬·¡½ºÀÇ »ý¼ºÀÚ´Â ºÎ¸ð Å¬·¡½ºÀÇ »ý¼ºÀÚ°¡ ¸ÕÀú È£ÃâµÈ ÀÌÈÄ¿¡ È£ÃâµÈ´Ù.
-// µû·Î ÄÚµå¸¦ Ãß°¡ÇÏÁö ¾Ê¾Æµµ À§ÀÇ ¼ø¼­·Î ÀÚµ¿À¸·Î ¼öÇàµÈ´Ù.
-// µû¶ó¼­, ÀÚ½Ä Å¬·¡½ºµéÀº ºÎ¸ð Å¬·¡½ºÀÇ ¸â¹ö º¯¼ö ÃÊ±âÈ­¸¦ ½Å°æ¾²Áö ¾Ê¾Æµµ µÈ´Ù.
-// ºÎ¸ð Å¬·¡½º¿¡ ÀÖ´Â »ý¼ºÀÚ°¡ ¾Ë¾Æ¼­ ÇÏ±â ¶§¹®
-// ¿¹Á¦ ÄÚµå)
+// ìƒì†ë°›ì€ í´ëž˜ìŠ¤ì˜ ìƒì„±ìžëŠ” ë¶€ëª¨ í´ëž˜ìŠ¤ì˜ ìƒì„±ìžê°€ ë¨¼ì € í˜¸ì¶œëœ ì´í›„ì— í˜¸ì¶œëœë‹¤.
+// ë”°ë¡œ ì½”ë“œë¥¼ ì¶”ê°€í•˜ì§€ ì•Šì•„ë„ ìœ„ì˜ ìˆœì„œë¡œ ìžë™ìœ¼ë¡œ ìˆ˜í–‰ëœë‹¤.
+// ë”°ë¼ì„œ, ìžì‹ í´ëž˜ìŠ¤ë“¤ì€ ë¶€ëª¨ í´ëž˜ìŠ¤ì˜ ë©¤ë²„ ë³€ìˆ˜ ì´ˆê¸°í™”ë¥¼ ì‹ ê²½ì“°ì§€ ì•Šì•„ë„ ëœë‹¤.
+// ë¶€ëª¨ í´ëž˜ìŠ¤ì— ìžˆëŠ” ìƒì„±ìžê°€ ì•Œì•„ì„œ í•˜ê¸° ë•Œë¬¸
+// ì˜ˆì œ ì½”ë“œ)
 // class A { virtual ~A(){} }
 // class B : public A { virtual ~B(){} }
 // class C : public B { virtual ~C(){} }
 // int main()
 // {
-//		C* pC = new C(); // A»ý¼ºÀÚ -> B»ý¼ºÀÚ -> C»ý¼ºÀÚ ¼øÀ¸·Î È£ÃâµÊ
+//		C* pC = new C(); // Aìƒì„±ìž -> Bìƒì„±ìž -> Cìƒì„±ìž ìˆœìœ¼ë¡œ í˜¸ì¶œë¨
 // }
 RandomSpeedObj::RandomSpeedObj()
 	: m_XSpeed(1.f)
@@ -21,36 +21,37 @@ RandomSpeedObj::RandomSpeedObj()
 	, m_IsRight(false)
 	, m_IsBottom(false)
 {
+	m_Shape = L'â˜…';
 }
 
-// »ó¼Ó¹ÞÀº Å¬·¡½ºÀÇ ¼Ò¸êÀÚ´Â ÀÚ½ÅÀÌ ¸ÕÀú È£ÃâµÈ ÈÄ, ºÎ¸ð Å¬·¡½ºÀÇ ¼Ò¸êÀÚ¸¦ È£ÃâÇÑ´Ù.
-// µû·Î ÄÚµå¸¦ Ãß°¡ÇÏÁö ¾Ê¾Æµµ À§ÀÇ ¼ø¼­·Î ÀÚµ¿À¸·Î ¼öÇàµÈ´Ù.
-// »ý¼ºÀÚ¿Í È£Ãâ ¼ø¼­°¡ ¹Ý´ëÀÎ ÀÌÀ¯´Â
-// ÇÒ´ç ÇØÁ¦°¡ ÇÒ´çµÈ ¼ø¼­ÀÇ ¹Ý´ë·Î ÁøÇàµÇ¾î¾ß ¾ÈÀüÇÏ°í È¿À²ÀûÀÌ±â ¶§¹®ÀÌ´Ù.
-// ¿¹Á¦ ÄÚµå)
+// ìƒì†ë°›ì€ í´ëž˜ìŠ¤ì˜ ì†Œë©¸ìžëŠ” ìžì‹ ì´ ë¨¼ì € í˜¸ì¶œëœ í›„, ë¶€ëª¨ í´ëž˜ìŠ¤ì˜ ì†Œë©¸ìžë¥¼ í˜¸ì¶œí•œë‹¤.
+// ë”°ë¡œ ì½”ë“œë¥¼ ì¶”ê°€í•˜ì§€ ì•Šì•„ë„ ìœ„ì˜ ìˆœì„œë¡œ ìžë™ìœ¼ë¡œ ìˆ˜í–‰ëœë‹¤.
+// ìƒì„±ìžì™€ í˜¸ì¶œ ìˆœì„œê°€ ë°˜ëŒ€ì¸ ì´ìœ ëŠ”
+// í• ë‹¹ í•´ì œê°€ í• ë‹¹ëœ ìˆœì„œì˜ ë°˜ëŒ€ë¡œ ì§„í–‰ë˜ì–´ì•¼ ì•ˆì „í•˜ê³  íš¨ìœ¨ì ì´ê¸° ë•Œë¬¸ì´ë‹¤.
+// ì˜ˆì œ ì½”ë“œ)
 // class A { virtual ~A(){} }
 // class B : public A { virtual ~B(){} }
 // class C : public B { virtual ~C(){} }
 // int main()
 // {
-//		C* pC = new C(); // A»ý¼ºÀÚ -> B»ý¼ºÀÚ -> C»ý¼ºÀÚ ¼øÀ¸·Î È£ÃâµÊ
-//		delete pC;		 // C¼Ò¸êÀÚ -> B¼Ò¸êÀÚ -> A¼Ò¸êÀÚ ¼øÀ¸·Î È£ÃâµÊ
-//		// »ý¼ºÀÚ´Â Ç×»ó ½ÇÁ¦ ÀÚ½ÅÀ» ¾Æ´Â »óÅÂÀÌ±â ¶§¹®¿¡ virtual Å°¿öµå°¡ ÇÊ¿ä ¾øÁö¸¸
-//		// ¼Ò¸êÀÚ´Â ¼Ò¸ê ½ÃÁ¡¿¡ ºÎ¸ð Å¬·¡½º Æ÷ÀÎÅÍ Å¸ÀÔ¿¡ ÀúÀåµÈ º¯¼ö¸¦ ÅëÇØ deleteÇÒ °¡´É¼ºÀÌ ÀÖ±â ¶§¹®¿¡
-//		// virtual Å°¿öµå°¡ ¾ø´Ù¸é ½ÇÁ¦ ÀÚ½ÅÀÇ ¼Ò¸êÀÚ¸¦ Ã£À» ¼ö°¡ ¾øÀ¸¹Ç·Î, ¹Ýµå½Ã Å°¿öµå¸¦ Ãß°¡ÇØ¾ß ÇÑ´Ù.
-//		// À§ ÄÚµå¿¡¼­ ¸¸¾à virtual Å°¿öµå°¡ ¾ø¾ú´Ù¸é, A¼Ò¸êÀÚ¸¸ È£ÃâµÇ¾î ¸Þ¸ð¸® ¸¯ÀÌ ¹ß»ýÇÏ°Ô µÈ´Ù.
+//		C* pC = new C(); // Aìƒì„±ìž -> Bìƒì„±ìž -> Cìƒì„±ìž ìˆœìœ¼ë¡œ í˜¸ì¶œë¨
+//		delete pC;		 // Cì†Œë©¸ìž -> Bì†Œë©¸ìž -> Aì†Œë©¸ìž ìˆœìœ¼ë¡œ í˜¸ì¶œë¨
+//		// ìƒì„±ìžëŠ” í•­ìƒ ì‹¤ì œ ìžì‹ ì„ ì•„ëŠ” ìƒíƒœì´ê¸° ë•Œë¬¸ì— virtual í‚¤ì›Œë“œê°€ í•„ìš” ì—†ì§€ë§Œ
+//		// ì†Œë©¸ìžëŠ” ì†Œë©¸ ì‹œì ì— ë¶€ëª¨ í´ëž˜ìŠ¤ í¬ì¸í„° íƒ€ìž…ì— ì €ìž¥ëœ ë³€ìˆ˜ë¥¼ í†µí•´ deleteí•  ê°€ëŠ¥ì„±ì´ ìžˆê¸° ë•Œë¬¸ì—
+//		// virtual í‚¤ì›Œë“œê°€ ì—†ë‹¤ë©´ ì‹¤ì œ ìžì‹ ì˜ ì†Œë©¸ìžë¥¼ ì°¾ì„ ìˆ˜ê°€ ì—†ìœ¼ë¯€ë¡œ, ë°˜ë“œì‹œ í‚¤ì›Œë“œë¥¼ ì¶”ê°€í•´ì•¼ í•œë‹¤.
+//		// ìœ„ ì½”ë“œì—ì„œ ë§Œì•½ virtual í‚¤ì›Œë“œê°€ ì—†ì—ˆë‹¤ë©´, Aì†Œë©¸ìžë§Œ í˜¸ì¶œë˜ì–´ ë©”ëª¨ë¦¬ ë¦­ì´ ë°œìƒí•˜ê²Œ ëœë‹¤.
 // } 
 RandomSpeedObj::~RandomSpeedObj()
 {
 }
 
-// ¾ÕÀ¸·Î ÇÊ¿ä ¾øÀ» °Í °°¾Æ Áö¿î´Ù.
+// ì•žìœ¼ë¡œ í•„ìš” ì—†ì„ ê²ƒ ê°™ì•„ ì§€ìš´ë‹¤.
 /*
 void RandomSpeedObj::Init()
 {
-	// ¿À¹ö¶óÀÌµù ÇÑ ÇÔ¼ö´Â ±âº»ÀûÀ¸·Î ºÎ¸ð ÇÔ¼ö¸¦ È£ÃâÇÏÁö ¾Ê´Â´Ù.
-	// ºÎ¸ðÇÔ¼öµµ È£ÃâÇÒ ÇÊ¿ä°¡ ÀÖÀ» °æ¿ì ¾Æ·¡¿Í °°ÀÌ ºÎ¸ð Å¬·¡½º::ÇÔ¼ö¸í À¸·Î È£ÃâÇØÁØ´Ù.
-	// Init()ÀÇ °æ¿ì´Â ºÎ¸ðÀÇ Init()À» ¸ÕÀú È£ÃâÇÏ°í, Ãß°¡·Î ³ª(ÀÚ½Ä)°¡ ÃÊ±âÈ­ÇÒ °ÍÀ» ÇØÁØ´Ù.
+	// ì˜¤ë²„ë¼ì´ë”© í•œ í•¨ìˆ˜ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ ë¶€ëª¨ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ì§€ ì•ŠëŠ”ë‹¤.
+	// ë¶€ëª¨í•¨ìˆ˜ë„ í˜¸ì¶œí•  í•„ìš”ê°€ ìžˆì„ ê²½ìš° ì•„ëž˜ì™€ ê°™ì´ ë¶€ëª¨ í´ëž˜ìŠ¤::í•¨ìˆ˜ëª… ìœ¼ë¡œ í˜¸ì¶œí•´ì¤€ë‹¤.
+	// Init()ì˜ ê²½ìš°ëŠ” ë¶€ëª¨ì˜ Init()ì„ ë¨¼ì € í˜¸ì¶œí•˜ê³ , ì¶”ê°€ë¡œ ë‚˜(ìžì‹)ê°€ ì´ˆê¸°í™”í•  ê²ƒì„ í•´ì¤€ë‹¤.
 	Object::Init();
 	m_XSpeed = 1.f;
 	m_YSpeed = 1.f;
@@ -58,7 +59,7 @@ void RandomSpeedObj::Init()
 
 void RandomSpeedObj::Release()
 {
-	// ºÎ¸ð Å¬·¡½º¿Í ´Ù¸£°Ô ±¸ÇöÇÒ °Ô ¾ø´Ù¸é, ±×³É ºÎ¸ð²¨¸¦ ¿©±â¼­ ´Ù½Ã È£ÃâÇØÁÖ¸é µÈ´Ù.
+	// ë¶€ëª¨ í´ëž˜ìŠ¤ì™€ ë‹¤ë¥´ê²Œ êµ¬í˜„í•  ê²Œ ì—†ë‹¤ë©´, ê·¸ëƒ¥ ë¶€ëª¨êº¼ë¥¼ ì—¬ê¸°ì„œ ë‹¤ì‹œ í˜¸ì¶œí•´ì£¼ë©´ ëœë‹¤.
 	Object::Release();
 }
 */
@@ -67,33 +68,33 @@ void RandomSpeedObj::Update()
 {
 	/*
 	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
-	// Move()ÀÇ ¸®ÅÏ °ªÀÌ falseÀÏ ¶§ (Áï, ¹Ù¿î´õ¸®¿¡ ´ê¾ÒÀ» ¶§)
-	// ¹æÇâÀ» ¹ÝÀü½ÃÅ°°í ¼Óµµ¸¦ ·£´ýÀ¸·Î º¯°æÇÏ´Â ÄÚµå
-	// ±âÁ¸ÀÇ °øÅëµÈ ·ÎÁ÷(ÀÌµ¿ ·ÎÁ÷)À» Move()¶ó´Â ÇÔ¼ö·Î ÃßÃâÇÏ¿©
-	// Áßº¹ ÄÚµå¸¦ ÁÙÀÌ°í Â÷ÀÌÁ¡À» ÆÄ¾ÇÇÏ±â ´õ ½¬¿öÁ³´Ù.
+	// Move()ì˜ ë¦¬í„´ ê°’ì´ falseì¼ ë•Œ (ì¦‰, ë°”ìš´ë”ë¦¬ì— ë‹¿ì•˜ì„ ë•Œ)
+	// ë°©í–¥ì„ ë°˜ì „ì‹œí‚¤ê³  ì†ë„ë¥¼ ëžœë¤ìœ¼ë¡œ ë³€ê²½í•˜ëŠ” ì½”ë“œ
+	// ê¸°ì¡´ì˜ ê³µí†µëœ ë¡œì§(ì´ë™ ë¡œì§)ì„ Move()ë¼ëŠ” í•¨ìˆ˜ë¡œ ì¶”ì¶œí•˜ì—¬
+	// ì¤‘ë³µ ì½”ë“œë¥¼ ì¤„ì´ê³  ì°¨ì´ì ì„ íŒŒì•…í•˜ê¸° ë” ì‰¬ì›Œì¡Œë‹¤.
 	*/
 
-	// È­¸éÀÇ ¹Ù¿î´õ¸®¸¦ ¹þ¾î³ª·Á ÇÏ¸é, ¹Ý´ë ¹æÇâÀ¸·Î ÀüÈ¯ÇÏ¿© °è¼Ó ¿òÁ÷ÀÌµµ·Ï ÇÑ´Ù.
+	// í™”ë©´ì˜ ë°”ìš´ë”ë¦¬ë¥¼ ë²—ì–´ë‚˜ë ¤ í•˜ë©´, ë°˜ëŒ€ ë°©í–¥ìœ¼ë¡œ ì „í™˜í•˜ì—¬ ê³„ì† ì›€ì§ì´ë„ë¡ í•œë‹¤.
 	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
-	/// > Á¦°¡ srand()¿¡ ´ëÇÑ ¼³¸íÀÌ ºÎÁ·Çß¾ú³×¿ä.
-	/// > srand()´Â rand()»ç¿ëÇÒ ¶§¸¶´Ù È£ÃâÇÏ´Â °ÍÀÌ ¾Æ´Ï¶ó
-	/// > °ÔÀÓ ½ÃÀÛ½Ã µü ÇÑ¹ø¸¸ È£ÃâµÇ¾î¾ß ÇÕ´Ï´Ù. (GameManager::Init()¿¡¼­)
-	/// > srand()°¡ ¸Å¹ø È£ÃâµÇ¸é ±× ¶§¸¶´Ù ·£´ý½Ãµå(·£´ý°ªÀÇ ±â¹Ý)ÀÌ °»½ÅµÇ¾î¼­
-	/// > ¸ðµç rand()°¡ µ¿ÀÏÇÑ ·£´ý°ªÀ» ¹ÝÈ¯ÇÏ°Ô µÇ¾î¹ö¸³´Ï´Ù.
-	/// > srand()´Â rand()ÇÔ¼ö°¡ °ªÀ» »êÃâÇÒ ¶§ Âü°íÇÏ´Â ¾î¶² ±â¹Ý°ªÀ» ¼³Á¤ÇÏ´Â ÇÔ¼öÀÔ´Ï´Ù.
+	/// > ì œê°€ srand()ì— ëŒ€í•œ ì„¤ëª…ì´ ë¶€ì¡±í–ˆì—ˆë„¤ìš”.
+	/// > srand()ëŠ” rand()ì‚¬ìš©í•  ë•Œë§ˆë‹¤ í˜¸ì¶œí•˜ëŠ” ê²ƒì´ ì•„ë‹ˆë¼
+	/// > ê²Œìž„ ì‹œìž‘ì‹œ ë”± í•œë²ˆë§Œ í˜¸ì¶œë˜ì–´ì•¼ í•©ë‹ˆë‹¤. (GameManager::Init()ì—ì„œ)
+	/// > srand()ê°€ ë§¤ë²ˆ í˜¸ì¶œë˜ë©´ ê·¸ ë•Œë§ˆë‹¤ ëžœë¤ì‹œë“œ(ëžœë¤ê°’ì˜ ê¸°ë°˜)ì´ ê°±ì‹ ë˜ì–´ì„œ
+	/// > ëª¨ë“  rand()ê°€ ë™ì¼í•œ ëžœë¤ê°’ì„ ë°˜í™˜í•˜ê²Œ ë˜ì–´ë²„ë¦½ë‹ˆë‹¤.
+	/// > srand()ëŠ” rand()í•¨ìˆ˜ê°€ ê°’ì„ ì‚°ì¶œí•  ë•Œ ì°¸ê³ í•˜ëŠ” ì–´ë–¤ ê¸°ë°˜ê°’ì„ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤.
 	//srand((unsigned int)time(nullptr));
 
-	// »ïÇ×¿¬»êÀÚ
-	// °£´ÜÇÏ°Ô if¹®°ú °°Àº ºÐ±â Ã³¸®¸¦ ÇÏ°í ½ÍÀ» ¶§ »ç¿ë
-	// 3°³ÀÇ Ç×À¸·Î ÀÌ·ç¾îÁ® ÀÖ¾î, »ïÇ×¿¬»êÀÚ¶ó°í ºÎ¸£¸ç,
-	// Ã¹ Ç×¿¡¼­ÀÇ true/false ¿©ºÎ¿¡ µû¶ó trueÀÌ¸é µÑÂ°Ç×, falseÀÌ¸é ¼ÂÂ°Ç×À» ¼öÇà
-	// (Æò°¡½Ä) ? (trueÀÎ °æ¿ì) : (falseÀÎ °æ¿ì)
+	// ì‚¼í•­ì—°ì‚°ìž
+	// ê°„ë‹¨í•˜ê²Œ ifë¬¸ê³¼ ê°™ì€ ë¶„ê¸° ì²˜ë¦¬ë¥¼ í•˜ê³  ì‹¶ì„ ë•Œ ì‚¬ìš©
+	// 3ê°œì˜ í•­ìœ¼ë¡œ ì´ë£¨ì–´ì ¸ ìžˆì–´, ì‚¼í•­ì—°ì‚°ìžë¼ê³  ë¶€ë¥´ë©°,
+	// ì²« í•­ì—ì„œì˜ true/false ì—¬ë¶€ì— ë”°ë¼ trueì´ë©´ ë‘˜ì§¸í•­, falseì´ë©´ ì…‹ì§¸í•­ì„ ìˆ˜í–‰
+	// (í‰ê°€ì‹) ? (trueì¸ ê²½ìš°) : (falseì¸ ê²½ìš°)
 	if (!Move(m_IsRight ? Direction::RIGHT : Direction::LEFT, 1.f))
 	{
-		// m_IsRightÀÇ °ªÀÌ trueÀÎ °æ¿ì Move()ÇÔ¼öÀÇ ÀÎÀÚ·Î RIGHT¸¦ ³Ñ±â°Ô µÇ°í,
-		//					falseÀÎ °æ¿ì LEFT¸¦ ³Ñ±â°Ô ÇÏ´Â ÄÚµå
-		// ÀÌµ¿ÀÌ ½ÇÆÐÇÏ¸é(¹Ù¿î´õ¸®¿¡ °É¸®¸é) ¹Ý´ë ¹æÇâÀ¸·Î ÀüÈ¯
-		// bool°ª º¯¼ö°¡ ÀÚ½ÅÀÇ °ªÀ» ¹ÝÀü½ÃÅ°´Â ÄÚµå (true->false, false->true)
+		// m_IsRightì˜ ê°’ì´ trueì¸ ê²½ìš° Move()í•¨ìˆ˜ì˜ ì¸ìžë¡œ RIGHTë¥¼ ë„˜ê¸°ê²Œ ë˜ê³ ,
+		//					falseì¸ ê²½ìš° LEFTë¥¼ ë„˜ê¸°ê²Œ í•˜ëŠ” ì½”ë“œ
+		// ì´ë™ì´ ì‹¤íŒ¨í•˜ë©´(ë°”ìš´ë”ë¦¬ì— ê±¸ë¦¬ë©´) ë°˜ëŒ€ ë°©í–¥ìœ¼ë¡œ ì „í™˜
+		// boolê°’ ë³€ìˆ˜ê°€ ìžì‹ ì˜ ê°’ì„ ë°˜ì „ì‹œí‚¤ëŠ” ì½”ë“œ (true->false, false->true)
 		m_IsRight = !m_IsRight;
 	}
 	if (!Move(m_IsBottom ? Direction::DOWN : Direction::UP, 1.f))
@@ -105,7 +106,7 @@ void RandomSpeedObj::Update()
 	if (!Move(m_IsRight ? Direction::RIGHT : Direction::LEFT, m_XSpeed))
 	{
 		m_IsRight = !m_IsRight;
-		m_XSpeed = (rand() % 6 + 1) * 0.5f; // 0.5¹è ~ 3¹è
+		m_XSpeed = (rand() % 6 + 1) * 0.5f; // 0.5ë°° ~ 3ë°°
 	}
 	if (!Move(m_IsBottom ? Direction::DOWN : Direction::UP, m_YSpeed))
 	{
@@ -115,8 +116,8 @@ void RandomSpeedObj::Update()
 	*/
 
 	/*
-	// Update()ÀÇ °æ¿ì´Â »õ·Ó°Ô ±¸ÇöÀ» ÀçÁ¤ÀÇÇÏ±â À§ÇØ
-	// ºÎ¸ðÀÇ Update()¸¦ È£ÃâÇÏÁö ¾ÊÀº Á¡ Âü°í.
+	// Update()ì˜ ê²½ìš°ëŠ” ìƒˆë¡­ê²Œ êµ¬í˜„ì„ ìž¬ì •ì˜í•˜ê¸° ìœ„í•´
+	// ë¶€ëª¨ì˜ Update()ë¥¼ í˜¸ì¶œí•˜ì§€ ì•Šì€ ì  ì°¸ê³ .
 	if (m_IsRight)
 	{
 		m_X += 2 * m_XSpeed;
@@ -124,7 +125,7 @@ void RandomSpeedObj::Update()
 		{
 			m_X = boundaryBox.right;
 			m_IsRight = false;
-			m_XSpeed = (rand() % 6 + 1) * 0.5f; // 0.5¹è ~ 3¹è
+			m_XSpeed = (rand() % 6 + 1) * 0.5f; // 0.5ë°° ~ 3ë°°
 		}
 	}
 	else
@@ -162,8 +163,8 @@ void RandomSpeedObj::Update()
 
 void RandomSpeedObj::Render()
 {
-	// ¿À¹ö¶óÀÌµùÇÑ ÇÔ¼ö´Â ±âº»ÀûÀ¸·Î ºÎ¸ðÇÔ¼ö¸¦ È£ÃâÇÏÁö ¾Ê´Â´Ù.
-	// µû¶ó¼­ ºÎ¸ðÇÔ¼öµµ È£ÃâÇÒ ÇÊ¿ä°¡ ÀÖÀ» °æ¿ì ¾Æ·¡¿Í°°ÀÌ ºÎ¸ðÅ¬·¡½º::ÇÔ¼ö¸í À¸·Î È£ÃâÇØÁØ´Ù.
-	// ºÎ¸ðÅ¬·¡½ºÀÇ ±¸Çö°ú ´Ù¸£°Ô Ã³¸®ÇÒ °Ô ¾ø´Ù¸é, ±×³É ºÎ¸ð²¨¸¦ ¿©±â´Ù ´Ù½Ã È£ÃâÇØÁÖ¸é µÈ´Ù.
+	// ì˜¤ë²„ë¼ì´ë”©í•œ í•¨ìˆ˜ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ ë¶€ëª¨í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ì§€ ì•ŠëŠ”ë‹¤.
+	// ë”°ë¼ì„œ ë¶€ëª¨í•¨ìˆ˜ë„ í˜¸ì¶œí•  í•„ìš”ê°€ ìžˆì„ ê²½ìš° ì•„ëž˜ì™€ê°™ì´ ë¶€ëª¨í´ëž˜ìŠ¤::í•¨ìˆ˜ëª… ìœ¼ë¡œ í˜¸ì¶œí•´ì¤€ë‹¤.
+	// ë¶€ëª¨í´ëž˜ìŠ¤ì˜ êµ¬í˜„ê³¼ ë‹¤ë¥´ê²Œ ì²˜ë¦¬í•  ê²Œ ì—†ë‹¤ë©´, ê·¸ëƒ¥ ë¶€ëª¨êº¼ë¥¼ ì—¬ê¸°ë‹¤ ë‹¤ì‹œ í˜¸ì¶œí•´ì£¼ë©´ ëœë‹¤.
 	Object::Render();
 }

@@ -6,16 +6,17 @@
 SnakeHead::SnakeHead()
 	: m_Speed(1.f)
 	, m_CurDir(Direction::UP)
-    /// > ÃÊ±â°ªÀÌ 0ÀÌ¾î¼­ Ã³À½¿¡ ¹æÇâÅ°¸¦ ´­·¯µµ ÀÌµ¿ÀÌ ¾ÈµÇ³×¿ä;¤±;
-    /// > XÅ°¸¦ ´­·¯¼­ ÀÌ¼ÓÀ» Áõ°¡½ÃÄÑÁÖ¸é ¿òÁ÷ÀÌ°Ô µÇ±ä ÇÏÁö¸¸,
-    /// > ÃÊ±â ÀÌ¼ÓÀÌ ¾î´ÀÁ¤µµ´Â ÀÖ¾îÁà¾ß ÁÁÀ» µí ÇÕ´Ï´Ù..!
-	// ³Ü³Ü! ÃÊ±â ÀÌ¼Ó ³Ö¾ú½À´Ï´ç!! °¨»çÇÕ´Ï´Ù!! ¤¾¤¾¤¾¤¾
+    /// > ì´ˆê¸°ê°’ì´ 0ì´ì–´ì„œ ì²˜ìŒì— ë°©í–¥í‚¤ë¥¼ ëˆŒëŸ¬ë„ ì´ë™ì´ ì•ˆë˜ë„¤ìš”;ã…;
+    /// > Xí‚¤ë¥¼ ëˆŒëŸ¬ì„œ ì´ì†ì„ ì¦ê°€ì‹œì¼œì£¼ë©´ ì›€ì§ì´ê²Œ ë˜ê¸´ í•˜ì§€ë§Œ,
+    /// > ì´ˆê¸° ì´ì†ì´ ì–´ëŠì •ë„ëŠ” ìžˆì–´ì¤˜ì•¼ ì¢‹ì„ ë“¯ í•©ë‹ˆë‹¤..!
+	// ë„µë„µ! ì´ˆê¸° ì´ì† ë„£ì—ˆìŠµë‹ˆë‹¹!! ê°ì‚¬í•©ë‹ˆë‹¤!! ã…Žã…Žã…Žã…Ž
 {
+	m_Shape = L'â—ˆ';
 }
 
 SnakeHead::~SnakeHead()
 {
-	//  ¸¸¾à¿¡ ²¿¸®°¡ ÀÖÀ¸¸é ÇÔ²² ÇÒ´çÇØÁ¦ ÇØÁØ´Ù.
+	//  ë§Œì•½ì— ê¼¬ë¦¬ê°€ ìžˆìœ¼ë©´ í•¨ê»˜ í• ë‹¹í•´ì œ í•´ì¤€ë‹¤.
 	for (auto& pTail : m_TailList)
 	{
 		delete pTail;
@@ -24,20 +25,14 @@ SnakeHead::~SnakeHead()
 
 void SnakeHead::Update()
 {
-	// ÀÓ½Ã·Î 10% È®·ü·Î ²¿¸® Ãß°¡
-	if (rand() % 100 < 10)
-	{
-		AddTail();
-	}
-
-	// ¿òÁ÷ÀÌ±â Àü¿¡ ¿ø·¡ À§Ä¡ º¸°ü
-	// ´ÙÀ½ ²¿¸®°¡ ÀÌ º¸°üµÈ À§Ä¡·Î ÀÌµ¿
+	// ì›€ì§ì´ê¸° ì „ì— ì›ëž˜ ìœ„ì¹˜ ë³´ê´€
+	// ë‹¤ìŒ ê¼¬ë¦¬ê°€ ì´ ë³´ê´€ëœ ìœ„ì¹˜ë¡œ ì´ë™
 	float prevX = m_X;
 	float prevY = m_Y;
 
 	Move(m_CurDir, m_Speed);
 
-	// °¢ ²¿¸®´Â ÀÌÀü ²¿¸®ÀÇ À§Ä¡·Î ¼¼ÆÃ >> Áï, µû¶ó°¡´Â ÇüÅÂ°¡ µÈ´Ù.
+	// ê° ê¼¬ë¦¬ëŠ” ì´ì „ ê¼¬ë¦¬ì˜ ìœ„ì¹˜ë¡œ ì„¸íŒ… >> ì¦‰, ë”°ë¼ê°€ëŠ” í˜•íƒœê°€ ëœë‹¤.
 	for (auto& pTail : m_TailList)
 	{
 		float tempX = pTail->GetX();
@@ -48,21 +43,21 @@ void SnakeHead::Update()
 		prevY = tempY;
 	}
 
-	// ¿òÁ÷ÀÎ µÚ¿¡ ¸Ó¸®°¡ ²¿¸®¿¡ ´ê¾Ò´ÂÁö Ã¼Å©ÇÏ¿© °ÔÀÓ ¿À¹ö Ã³¸®
+	// ì›€ì§ì¸ ë’¤ì— ë¨¸ë¦¬ê°€ ê¼¬ë¦¬ì— ë‹¿ì•˜ëŠ”ì§€ ì²´í¬í•˜ì—¬ ê²Œìž„ ì˜¤ë²„ ì²˜ë¦¬
 	for (auto& pTail : m_TailList)
 	{
-		// °¢ ¿ÀºêÁ§Æ®ÀÇ Å©±â´Â 1·Î °íÁ¤ÀÌ¹Ç·Î
-		// µÎ ¿ÀºêÁ§Æ®ÀÇ X, Y °Å¸®°¡ ¸ðµÎ 1 ÀÌ³»ÀÌ¸é °ãÃÄ ÀÖ´Â °ÍÀÌ´Ù.
+		// ê° ì˜¤ë¸Œì íŠ¸ì˜ í¬ê¸°ëŠ” 1ë¡œ ê³ ì •ì´ë¯€ë¡œ
+		// ë‘ ì˜¤ë¸Œì íŠ¸ì˜ X, Y ê±°ë¦¬ê°€ ëª¨ë‘ 1 ì´ë‚´ì´ë©´ ê²¹ì³ ìžˆëŠ” ê²ƒì´ë‹¤.
 		if (m_X > pTail->GetX() - 0.5f &&
 			m_X < pTail->GetX() + 0.5f &&
 			m_Y < pTail->GetY() - 0.5f &&
 			m_Y > pTail->GetY() + 0.5f)
 		{
-			// ÀÏ´Ü Ãæµ¹ ½Ã ¹Ù·Î °ÔÀÓ Á¾·á µÇµµ·Ï ±¸Çö
+			// ì¼ë‹¨ ì¶©ëŒ ì‹œ ë°”ë¡œ ê²Œìž„ ì¢…ë£Œ ë˜ë„ë¡ êµ¬í˜„
 			GameManager::GetInstance().Shutdown();
 			return;
 			
-			// Q. ¿Ö Á¾·á°¡ ¾È µÉ ±î¿ä...? ±×³É ¸· Àß °¡´Âµ¥.....
+			// Q. ì™œ ì¢…ë£Œê°€ ì•ˆ ë  ê¹Œìš”...? ê·¸ëƒ¥ ë§‰ ìž˜ ê°€ëŠ”ë°.....
 		}
 	}
 }
@@ -71,7 +66,7 @@ void SnakeHead::Render()
 {
 	Object::Render();
 
-	// ³ª¿¡°Ô ºÙÀº ²¿¸®µéµµ ·»´õ¸µ
+	// ë‚˜ì—ê²Œ ë¶™ì€ ê¼¬ë¦¬ë“¤ë„ ë Œë”ë§
 	for (auto& pTail : m_TailList)
 	{
 		pTail->Render();
@@ -82,8 +77,8 @@ void SnakeHead::OnKeyPress(BYTE _key)
 {
 	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
 
-	// Move() ÇÔ¼ö·Î ÀÌµ¿ ·ÎÁ÷À» ÅëÀÏ!
-	// ÀÌÁ¦ °¢°¢ ÀÛ¼ºÇÏÁö ¾Ê°í °£°áÇÏ°Ô Â© ¼ö ÀÖ°Ô µÇ¾ú´Ù!
+	// Move() í•¨ìˆ˜ë¡œ ì´ë™ ë¡œì§ì„ í†µì¼!
+	// ì´ì œ ê°ê° ìž‘ì„±í•˜ì§€ ì•Šê³  ê°„ê²°í•˜ê²Œ ì§¤ ìˆ˜ ìžˆê²Œ ë˜ì—ˆë‹¤!
 
 	switch (_key)
 	{
@@ -116,7 +111,7 @@ void SnakeHead::OnKeyPress(BYTE _key)
 		}
 		break;
 	*/
-	// À¯Àú´Â ¹æÇâ¸¸ ¹Ù²ãÁÙ ¼ö ÀÖ´Ù.
+	// ìœ ì €ëŠ” ë°©í–¥ë§Œ ë°”ê¿”ì¤„ ìˆ˜ ìžˆë‹¤.
 	case VK_UP:
 	{
 		m_CurDir = Direction::UP;
@@ -143,32 +138,32 @@ void SnakeHead::OnKeyPress(BYTE _key)
 
 	case 'Z':
 		{
-			// ÀÌµ¿ ¼Óµµ ÁÙÀÌ±â (ÃÖ¼Ò 0.1¹è)
+			// ì´ë™ ì†ë„ ì¤„ì´ê¸° (ìµœì†Œ 0.1ë°°)
 			m_Speed = std::max<float>(m_Speed - 0.1f, 0.1f);
-			// Q. ´ÃÀÌ±â ÁÙÀÌ±â min, max ¿ä°Å´Â
-			//    maxÀÏ ¶§, ÁÙ¾îµå´Â °Ô ÃÖ´ë 0.1±îÁö¸¸ ÁÙ¾îµç´Ù ÀÎ °Ç°¡¿ë??
-			//	                        ÃÖ¼Ò 0.1±îÁö ÁÙ¾îµç´Ù°¡ ¾Æ´Ï±º¿ä...
-			//    minÀÏ ¶§, ´Ã¾î³ª´Â °Ô ÃÖ´ë 3.0±îÁö ´Ã¾î³ª´Â °Ô ¾Æ´Ï¶ó
-			//                          ÃÖ¼Ò 3.0±îÁö ´Ã¾î³­´Ù´Ï??? @_@??
-			// ±×·¯¹È.. ÀÏÄÉ ÀÌÇØÇÏ´Â °Ô ¸ÂÀ»±î¿ë?
-			// A < X < B ÀÏ ¶§, X¸¦ ÃÖ¼Ò A±îÁö ÃÖ´ë B±îÁö¸¸À¸·Î ÇÑÁ¤ÇÑ´Ù°í ÇÏ¸é
-			// ÃÖ¼Ò°ª A´Â ÃÖ´ë 0.1±îÁö¸¸ µÈ´Ù ÀÌ¹Ç·Î max¸¦ ¾²´Â °ÍÀÌ°í
-			// ÃÖ´ë°ª B´Â ÃÖ¼Ò 3.0±îÁö¸¸ µÈ´Ù ÀÌ¹Ç·Î minÀ» ¾²´Â °ÍÀÌ¶ó´Â ¶æÀÏ±î¿ä...?
-			// Çò°¥¸®³×¿©...@_@
-            /// > max ÇÔ¼ö´Â ÀÎÀÚ·Î ³Ñ¾î¿Â µÎ ÀÎ¼ö Áß¿¡ ´õ Å« °ªÀ» ¼±ÅÃÇÏ´Â ÇÔ¼öÀÔ´Ï´Ù.
-            /// > µû¶ó¼­ »õ·Î °è»êÇÑ °ª(m_Speed - 0.1f)°ú ÃÖ¼ÒÇÑ À¯ÁöÇÒ °ª(0.1f)À» ³Ñ°Ü¼­ maxÇÔ¼ö¸¦ È£ÃâÇÑ °ÍÀÌ°í
-            /// > Áï, »õ·Î °è»êÇÑ °ªÀÌ 0.1fº¸´Ù Å©¸é ±× °ªÀÌ Ã¤ÅÃµÇ°í
-            /// > ¸¸¾à 0.1fº¸´Ù ³·Àº °ªÀÌ¶ó¸é ±× °ªÀº ¹ö¸®°í 0.1f¸¦ ¹ÝÈ¯ÇÑ´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù.
-            /// > Áï, 'ÃÖ´ë 0.1±îÁö¸¸ µÈ´Ù'°¡ ¾Æ´Ï¶ó 'ÃÖ¼Ò 0.1±îÁö¸¸ µÈ´Ù'°¡ ¸Â½À´Ï´Ù.
-            /// > min ÇÔ¼öÀÇ °æ¿ìµµ À§¿Í°°Àº ¿ø¸®·Î »ý°¢ÇÏ¸é µË´Ï´Ù.
-            /// > Áï, m_Speed + 0.1f ·Î °è»êµÈ °ªÀÌ 3.0f ÀÌÇÏ¿©¾ß ±× °ªÀÌ ¾²ÀÌ´Â °ÍÀÔ´Ï´Ù.
-			// ¿À¿À¿À ±×·¸±º¿ä!! ÀÌÁ¦ ÀÌÇØ°¡ µÇ¾ú¾î¿ä!! °¨»çÇÕ´Ï´ç!!!!
+			// Q. ëŠ˜ì´ê¸° ì¤„ì´ê¸° min, max ìš”ê±°ëŠ”
+			//    maxì¼ ë•Œ, ì¤„ì–´ë“œëŠ” ê²Œ ìµœëŒ€ 0.1ê¹Œì§€ë§Œ ì¤„ì–´ë“ ë‹¤ ì¸ ê±´ê°€ìš©??
+			//	                        ìµœì†Œ 0.1ê¹Œì§€ ì¤„ì–´ë“ ë‹¤ê°€ ì•„ë‹ˆêµ°ìš”...
+			//    minì¼ ë•Œ, ëŠ˜ì–´ë‚˜ëŠ” ê²Œ ìµœëŒ€ 3.0ê¹Œì§€ ëŠ˜ì–´ë‚˜ëŠ” ê²Œ ì•„ë‹ˆë¼
+			//                          ìµœì†Œ 3.0ê¹Œì§€ ëŠ˜ì–´ë‚œë‹¤ë‹ˆ??? @_@??
+			// ê·¸ëŸ¬ë¯„.. ì¼ì¼€ ì´í•´í•˜ëŠ” ê²Œ ë§žì„ê¹Œìš©?
+			// A < X < B ì¼ ë•Œ, Xë¥¼ ìµœì†Œ Aê¹Œì§€ ìµœëŒ€ Bê¹Œì§€ë§Œìœ¼ë¡œ í•œì •í•œë‹¤ê³  í•˜ë©´
+			// ìµœì†Œê°’ AëŠ” ìµœëŒ€ 0.1ê¹Œì§€ë§Œ ëœë‹¤ ì´ë¯€ë¡œ maxë¥¼ ì“°ëŠ” ê²ƒì´ê³ 
+			// ìµœëŒ€ê°’ BëŠ” ìµœì†Œ 3.0ê¹Œì§€ë§Œ ëœë‹¤ ì´ë¯€ë¡œ minì„ ì“°ëŠ” ê²ƒì´ë¼ëŠ” ëœ»ì¼ê¹Œìš”...?
+			// í—·ê°ˆë¦¬ë„¤ì—¬...@_@
+            /// > max í•¨ìˆ˜ëŠ” ì¸ìžë¡œ ë„˜ì–´ì˜¨ ë‘ ì¸ìˆ˜ ì¤‘ì— ë” í° ê°’ì„ ì„ íƒí•˜ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤.
+            /// > ë”°ë¼ì„œ ìƒˆë¡œ ê³„ì‚°í•œ ê°’(m_Speed - 0.1f)ê³¼ ìµœì†Œí•œ ìœ ì§€í•  ê°’(0.1f)ì„ ë„˜ê²¨ì„œ maxí•¨ìˆ˜ë¥¼ í˜¸ì¶œí•œ ê²ƒì´ê³ 
+            /// > ì¦‰, ìƒˆë¡œ ê³„ì‚°í•œ ê°’ì´ 0.1fë³´ë‹¤ í¬ë©´ ê·¸ ê°’ì´ ì±„íƒë˜ê³ 
+            /// > ë§Œì•½ 0.1fë³´ë‹¤ ë‚®ì€ ê°’ì´ë¼ë©´ ê·¸ ê°’ì€ ë²„ë¦¬ê³  0.1fë¥¼ ë°˜í™˜í•œë‹¤ëŠ” ì˜ë¯¸ìž…ë‹ˆë‹¤.
+            /// > ì¦‰, 'ìµœëŒ€ 0.1ê¹Œì§€ë§Œ ëœë‹¤'ê°€ ì•„ë‹ˆë¼ 'ìµœì†Œ 0.1ê¹Œì§€ë§Œ ëœë‹¤'ê°€ ë§žìŠµë‹ˆë‹¤.
+            /// > min í•¨ìˆ˜ì˜ ê²½ìš°ë„ ìœ„ì™€ê°™ì€ ì›ë¦¬ë¡œ ìƒê°í•˜ë©´ ë©ë‹ˆë‹¤.
+            /// > ì¦‰, m_Speed + 0.1f ë¡œ ê³„ì‚°ëœ ê°’ì´ 3.0f ì´í•˜ì—¬ì•¼ ê·¸ ê°’ì´ ì“°ì´ëŠ” ê²ƒìž…ë‹ˆë‹¤.
+			// ì˜¤ì˜¤ì˜¤ ê·¸ë ‡êµ°ìš”!! ì´ì œ ì´í•´ê°€ ë˜ì—ˆì–´ìš”!! ê°ì‚¬í•©ë‹ˆë‹¹!!!!
 		}
 		break;
 
 	case 'X':
 		{
-			// ÀÌµ¿ ¼Óµµ ´Ã¸®±â (ÃÖ´ë 3¹è)
+			// ì´ë™ ì†ë„ ëŠ˜ë¦¬ê¸° (ìµœëŒ€ 3ë°°)
 			m_Speed = std::min<float>(m_Speed + 0.1f, 3.0f);
 		}
 		break;
@@ -179,6 +174,6 @@ void SnakeHead::OnKeyPress(BYTE _key)
 void SnakeHead::AddTail()
 {
 	Object* pTail = new Object();
-	pTail->SetShape(L'¡Ø');
+	pTail->SetShape(L'â€»');
 	m_TailList.push_back(pTail);
 }
