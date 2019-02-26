@@ -12,15 +12,18 @@ public:
 	virtual void Render() override;
 
 public:
-	float GetSpeed() const { return m_Speed; }
-	void SetSpeed(float _speed) { m_Speed = _speed; }
-	float GetCurDir() const { return m_CurDir; }
-	void SetCurDir(Direction _curDir) { m_CurDir = _curDir; }
+	float	GetSpeed() const { return m_Speed; }
+	void	SetSpeed(float _speed) { m_Speed = _speed; }
 
-	void OnKeyPress(BYTE _key);
+//	float	GetCurDir() const { return m_CurDir; }
+//	void	SetCurDir(Direction _curDir) { m_CurDir = _curDir; }
+
+	void	OnKeyPress(BYTE _key);
+	void	AddTail();
 
 private:
-	float m_Speed;
-	Direction m_CurDir;
+	float				m_Speed;
+	Direction			m_CurDir;
+	std::list<Object*>	m_TailList;
 };
 

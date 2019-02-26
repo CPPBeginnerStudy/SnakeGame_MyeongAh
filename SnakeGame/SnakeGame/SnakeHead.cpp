@@ -14,16 +14,49 @@ SnakeHead::SnakeHead()
 
 SnakeHead::~SnakeHead()
 {
+	//  만약에 꼬리가 있으면 함께 할당해제 해준다.
+	for (auto& pTail : m_TailList)
+	{
+		delete pTail;
+	}
 }
 
 void SnakeHead::Update()
 {
+	// 임시로 10% 확률로 꼬리 추가
+	if (rand() % 100 < 10)
+	{
+		AddTail();
+	}
+
+	// 움직이기 전에 원래 위치 보관
+	// 다음 꼬리가 이 보관된 위치로 이동
+	float prevX = m_X;
+	float prevY = m_Y;
+
 	Move(m_CurDir, m_Speed);
+
+	// 각 꼬리는 이전 꼬리의 위치로 세팅 >> 즉, 따라가는 형태가 된다.
+	for (auto& pTail : m_TailList)
+	{
+		float tempX = pTail->GetX();
+		float tempY = pTail->GetY();
+		pTail->SetX(prevX);
+		pTail->SetY(prevY);
+		prevX = tempX;
+		prevY = tempY;
+	}
 }
 
 void SnakeHead::Render()
 {
 	Object::Render();
+
+	// 나에게 붙은 꼬리들도 렌더링
+	for (auto& pTail : m_TailList)
+	{
+		pTail->Render();
+	}
 }
 
 void SnakeHead::OnKeyPress(BYTE _key)
@@ -35,6 +68,7 @@ void SnakeHead::OnKeyPress(BYTE _key)
 
 	switch (_key)
 	{
+	/*
 	case VK_UP:
 		{
 			Move(Direction::UP, m_Speed);
@@ -62,6 +96,31 @@ void SnakeHead::OnKeyPress(BYTE _key)
 			m_CurDir = Direction::RIGHT;
 		}
 		break;
+	*/
+	// 유저는 방향만 바꿔줄 수 있다.
+	case VK_UP:
+	{
+		m_CurDir = Direction::UP;
+	}
+	break;
+
+	case VK_DOWN:
+	{
+		m_CurDir = Direction::DOWN;
+	}
+	break;
+
+	case VK_LEFT:
+	{
+		m_CurDir = Direction::LEFT;
+	}
+	break;
+
+	case VK_RIGHT:
+	{
+		m_CurDir = Direction::RIGHT;
+	}
+	break;
 
 	case 'Z':
 		{
@@ -96,4 +155,11 @@ void SnakeHead::OnKeyPress(BYTE _key)
 		break;
 	}
 
+}
+
+void SnakeHead::AddTail()
+{
+	Object* pTail = new Object();
+	pTail->SetShape(L'※');
+	m_TailList.push_back(pTail);
 }
