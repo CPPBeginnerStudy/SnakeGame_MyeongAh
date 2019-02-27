@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // virtual 키워드의 의미
 // 어떤 클래스들을 상속 관계로 만들 때 virtual 키워드가 어떤 역할을 하는지 설명하면,

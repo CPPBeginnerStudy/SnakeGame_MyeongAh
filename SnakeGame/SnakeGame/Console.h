@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 class Console
 {
 public: // 다른 데에서 호출할 수 있음

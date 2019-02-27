@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "SnakeHead.h"
 #include "Console.h"
 #include "GameManager.h"
@@ -33,6 +33,7 @@ void SnakeHead::Update()
 	Move(m_CurDir, m_Speed);
 
 	// 각 꼬리는 이전 꼬리의 위치로 세팅 >> 즉, 따라가는 형태가 된다.
+	// 프레임이 빨라지면 이미 옮겨가기도 전에 체크를 해서 꼬리 생기자마자 죽을 수 있음
 	for (auto& pTail : m_TailList)
 	{
 		float tempX = pTail->GetX();
