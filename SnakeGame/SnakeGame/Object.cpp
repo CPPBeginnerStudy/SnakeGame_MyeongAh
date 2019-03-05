@@ -14,7 +14,7 @@ Object::~Object()
 {
 }
 
-void Object::Update()
+void Object::Update(float _dt)
 {
 	// 중복 코드라서 이건 함수로 빠진다!
 	/*

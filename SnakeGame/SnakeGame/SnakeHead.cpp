@@ -4,7 +4,7 @@
 #include "GameManager.h"
 
 SnakeHead::SnakeHead()
-	: m_Speed(1.f)
+	: m_Speed(10.f)
 	, m_CurDir(Direction::UP)
     /// > 초기값이 0이어서 처음에 방향키를 눌러도 이동이 안되네요;ㅁ;
     /// > X키를 눌러서 이속을 증가시켜주면 움직이게 되긴 하지만,
@@ -23,14 +23,15 @@ SnakeHead::~SnakeHead()
 	}
 }
 
-void SnakeHead::Update()
+void SnakeHead::Update(float _dt)
 {
 	// 움직이기 전에 원래 위치 보관
 	// 다음 꼬리가 이 보관된 위치로 이동
 	float prevX = m_X;
 	float prevY = m_Y;
 
-	Move(m_CurDir, m_Speed);
+	// 디티를 곱함으로써 프레임 간격이 달라지더라도 내가 의도한 스피드로 움직이게 된다.
+	Move(m_CurDir, m_Speed * _dt); // 원래는 한 프레임당 얼마나 갈까 였는데, 이제는 1초당 얼마나 갈 것인지로 의미가 바뀜
 
 	// 각 꼬리는 이전 꼬리의 위치로 세팅 >> 즉, 따라가는 형태가 된다.
 	// 프레임이 빨라지면 이미 옮겨가기도 전에 체크를 해서 꼬리 생기자마자 죽을 수 있음
@@ -51,8 +52,8 @@ void SnakeHead::Update()
 		// 두 오브젝트의 X, Y 거리가 모두 1 이내이면 겹쳐 있는 것이다.
 		if (m_X > pTail->GetX() - 0.5f &&
 			m_X < pTail->GetX() + 0.5f &&
-			m_Y < pTail->GetY() - 0.5f &&
-			m_Y > pTail->GetY() + 0.5f)
+			m_Y > pTail->GetY() - 0.5f &&
+			m_Y < pTail->GetY() + 0.5f)
 		{
 			// 일단 충돌 시 바로 게임 종료 되도록 구현
 			GameManager::GetInstance().Shutdown();
@@ -136,7 +137,7 @@ void SnakeHead::OnKeyPress(BYTE _key)
 		m_CurDir = Direction::RIGHT;
 	}
 	break;
-
+/*
 	case 'Z':
 		{
 			// 이동 속도 줄이기 (최소 0.1배)
@@ -168,6 +169,7 @@ void SnakeHead::OnKeyPress(BYTE _key)
 			m_Speed = std::min<float>(m_Speed + 0.1f, 3.0f);
 		}
 		break;
+*/
 	}
 
 }

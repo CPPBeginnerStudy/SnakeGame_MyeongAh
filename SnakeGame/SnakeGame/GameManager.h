@@ -30,10 +30,10 @@ private: // 클래스 내에서만 호출할 수 있음
 	void Release();
 	void MainLoop();
 
-	void Update();
+	void Update(float _dt);
 	void Render();
 
-	void KeyInputHandling();
+	void KeyInputHandling(float _dt);
 
 private:
 	bool m_IsOn;
@@ -43,6 +43,8 @@ private:
 	// 포인터 변수의 이름 앞에 p를 붙여주는 네이밍 관습이 있다.
 	SnakeHead*	m_pSnakeHead;
 	Apple*		m_pApple;
+
+	float m_GameSpeed;
 };
 
 // 멤버 변수에는 m_대문자로 시작

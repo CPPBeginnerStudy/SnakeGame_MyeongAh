@@ -78,7 +78,7 @@ public:
 
 	// 오브젝트 생성할 때 Init, 소멸시킬 때 Release -> 필요 없을 것 같아 삭제
 	// 오브젝트마다 각자 알아서 업데이트, 랜더링
-	virtual void Update();
+	virtual void Update(float _dt);
 	virtual void Render();
 
 	// Init(), Release()는 엄청 큰 오브젝트를 만들었을 때,

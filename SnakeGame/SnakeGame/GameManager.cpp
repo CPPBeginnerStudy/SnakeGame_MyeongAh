@@ -5,12 +5,14 @@
 #include "RandomSpeedObj.h"
 #include "SnakeHead.h"
 #include "Apple.h"
+#include "Timer.h"
 
 // 생성자, 소멸자는 이미 역할이 정해져 있어서, 반환 타입이 필요 없다. (void 이런거)
 GameManager::GameManager()
 	: m_IsOn(false)
 	, m_pSnakeHead(nullptr)
 	, m_pApple(nullptr)
+	, m_GameSpeed(1.f)
 {
 }
 
@@ -121,10 +123,17 @@ void GameManager::Release()
 
 void GameManager::MainLoop()
 {
+	Timer mainTimer;
 	while (m_IsOn)
 	{
+		float realDT = mainTimer.GetDeltaTime(); //이루프와 다음루프 사이의 시간 간격을 알 수 있음 씨피유에서 계산하다보면 이러한 시간 간격이 조금씩 달라질 수 있기 때문에
+		float gameDT = realDT * m_GameSpeed;
+		// 델타 타임을 곱해줌으로써 이번 루프와 저번루프 사이의 간격을 알게 되어서 그만큼 보정해줄 수 있음
+		// 1초에 1만큼 이동한다를 보장해줄 수 있음
 		// 한 프레임마다 업데이트, 랜더링 진행
-		Update();
+		// 1초에 3프레임짜리 게임이 있고, 프레임 간격이 불규칙할 때, 그 것이 의도대로 움직이도록 보장
+		// 막 게임 랙 걸렸는데 멈췄다가 다시 되돌아오니 저만큼 가 있는 것
+		Update(gameDT);
 		Render();
 
 		// Sleep()함수는 인자로 받은 수치만큼(밀리세컨드 단위) 프로그램을 정지시킨다.
@@ -132,19 +141,24 @@ void GameManager::MainLoop()
 		// (1초에 33번 프레임이 돌게 되므로, 33프레임의 게임)
 		// (참고로 보통 상용 게임은 Update와 Render의 프레임을 분리하여,
 		//  렌더는 60프레임 고정, 업데이트는 수백~수천 프레임으로 돌게 해놓는다.)
-		Sleep(30);
+		
+		// Sleep(30 / m_GameSpeed); //_dt만들면서 다르게 사용할 예쩡
+		// 단점: 매우 빠르게 하면 정확하게 시간이 변하지 않을 수 있음
+		// 상용 게임에선 일케 안 함!! 게임 타이머를 따로 만들어서 함
 	}
 }
 
-void GameManager::Update()
+void GameManager::Update(float _dt)
 {
+	// 업데이트에서는 항상 델타타임을 사용함
+
 	// 가장 먼저 키 입력에 대한 처리를 한다.
-	KeyInputHandling();
+	KeyInputHandling(_dt);
 
 	// 게임이 가지고 있는 모든 객체들에게 각자 자신을 업데이트 하도록 Update()를 호출
 	for (auto& pObject : m_ObjectList)
 	{
-		pObject->Update();
+		pObject->Update(_dt);
 	}
 
 	// 뱀이 사과를 먹으면 뱀에 꼬리를 추가해주고 사과를 다른 곳으로 옮긴다.
@@ -182,7 +196,7 @@ void GameManager::Render()
 	console.SwapBuffer();
 }
 
-void GameManager::KeyInputHandling()
+void GameManager::KeyInputHandling(float _dt)
 {
 	// GetAsyncKeyState()함수는 현재 키보드의 특정 키의 눌린 상태를 반환한다.
 	// 어떤 키를 확인할지는 인자로 받으며, VK_ 로 시작하는 매크로값으로 정해져있다.
@@ -233,10 +247,12 @@ void GameManager::KeyInputHandling()
 	if (GetAsyncKeyState('Z') & 0x8000)
 	{
 		m_pSnakeHead->OnKeyPress('Z');
+		m_GameSpeed = std::max<float>(m_GameSpeed - _dt, 0.1f);
 	}
 	if (GetAsyncKeyState('X') & 0x8000)
 	{
 		m_pSnakeHead->OnKeyPress('X');
+		m_GameSpeed = std::min<float>(m_GameSpeed + _dt, 3.0f); // 1초간 누르면 1씩 오르니까 2됨.
 	}
 	// 영문자키 입력 처리 끝
 }

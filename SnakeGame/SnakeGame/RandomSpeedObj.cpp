@@ -16,8 +16,8 @@
 //		C* pC = new C(); // A생성자 -> B생성자 -> C생성자 순으로 호출됨
 // }
 RandomSpeedObj::RandomSpeedObj()
-	: m_XSpeed(1.f)
-	, m_YSpeed(1.f)
+	: m_XSpeed(10.f)
+	, m_YSpeed(10.f)
 	, m_IsRight(false)
 	, m_IsBottom(false)
 {
@@ -64,7 +64,7 @@ void RandomSpeedObj::Release()
 }
 */
 
-void RandomSpeedObj::Update()
+void RandomSpeedObj::Update(float _dt)
 {
 	/*
 	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
