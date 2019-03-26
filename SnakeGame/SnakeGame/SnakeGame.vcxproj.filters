@@ -45,6 +45,9 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Class\Util</Filter>
     </ClCompile>
+    <ClCompile Include="DeathZone.cpp">
+      <Filter>Class\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -71,5 +74,15 @@
     <ClInclude Include="Timer.h">
       <Filter>Class\Util</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Color.hpp">
+      <Filter>Class\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathZone.h">
+      <Filter>Class\Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SnakeGame.rc" />
   </ItemGroup>
 </Project>

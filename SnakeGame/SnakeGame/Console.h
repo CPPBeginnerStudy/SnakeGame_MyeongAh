@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "Color.hpp"
+
 class Console
 {
 public: // 다른 데에서 호출할 수 있음
@@ -31,7 +33,7 @@ public:
 	// wstring은 이러한 wchar_t를 이용하는 string인 것
 	// 참고로 흔히 사용하는 '유니코드' 인코딩 방법이 wchar_t를 사용한다.
 	// 자세히 알고 싶다면, MBCS(Multi Byte)와 WBCS(Wide Byte)의 차이를 구글에게 물어보자!
-	void Print(wchar_t _shape, short _x, short _y);
+	void Print(wchar_t _shape, Color _color, short _x, short _y);
 	void PrintText(const std::wstring& _text, short _x, short _y);
 
 	RECT GetBoundaryBox() const;

@@ -2,16 +2,19 @@
 #include "SnakeHead.h"
 #include "Console.h"
 #include "GameManager.h"
+#include "DeathZone.h"
 
 SnakeHead::SnakeHead()
-	: m_Speed(10.f)
+	: m_Speed(1) // 1번 업데이트 될 때마다 몇 칸을 움직일지 결정
 	, m_CurDir(Direction::UP)
     /// > 초기값이 0이어서 처음에 방향키를 눌러도 이동이 안되네요;ㅁ;
     /// > X키를 눌러서 이속을 증가시켜주면 움직이게 되긴 하지만,
     /// > 초기 이속이 어느정도는 있어줘야 좋을 듯 합니다..!
 	// 넵넵! 초기 이속 넣었습니당!! 감사합니다!! ㅎㅎㅎㅎ
+	// 기존 델타 타임 개념에서 
 {
 	m_Shape = L'◈';
+	m_Color = Color::GREEN;
 }
 
 SnakeHead::~SnakeHead()
@@ -21,47 +24,49 @@ SnakeHead::~SnakeHead()
 	{
 		delete pTail;
 	}
+	ClearTails();
 }
 
 void SnakeHead::Update(float _dt)
 {
 	// 움직이기 전에 원래 위치 보관
 	// 다음 꼬리가 이 보관된 위치로 이동
-	float prevX = m_X;
-	float prevY = m_Y;
-
+	int prevX = m_X;
+	int prevY = m_Y;
 	// 디티를 곱함으로써 프레임 간격이 달라지더라도 내가 의도한 스피드로 움직이게 된다.
-	Move(m_CurDir, m_Speed * _dt); // 원래는 한 프레임당 얼마나 갈까 였는데, 이제는 1초당 얼마나 갈 것인지로 의미가 바뀜
+	Move(m_CurDir, m_Speed); // 원래는 한 프레임당 얼마나 갈까 였는데, 이제는 1초당 얼마나 갈 것인지로 의미가 바뀜
 
 	// 각 꼬리는 이전 꼬리의 위치로 세팅 >> 즉, 따라가는 형태가 된다.
 	// 프레임이 빨라지면 이미 옮겨가기도 전에 체크를 해서 꼬리 생기자마자 죽을 수 있음
 	for (auto& pTail : m_TailList)
 	{
-		float tempX = pTail->GetX();
-		float tempY = pTail->GetY();
+		int tempX = pTail->GetX();
+		int tempY = pTail->GetY();
 		pTail->SetX(prevX);
 		pTail->SetY(prevY);
 		prevX = tempX;
 		prevY = tempY;
 	}
 
+	// 이제 충돌 처리는 공통 로직으로 처리함
+	/*
 	// 움직인 뒤에 머리가 꼬리에 닿았는지 체크하여 게임 오버 처리
 	for (auto& pTail : m_TailList)
 	{
 		// 각 오브젝트의 크기는 1로 고정이므로
 		// 두 오브젝트의 X, Y 거리가 모두 1 이내이면 겹쳐 있는 것이다.
-		if (m_X > pTail->GetX() - 0.5f &&
-			m_X < pTail->GetX() + 0.5f &&
-			m_Y > pTail->GetY() - 0.5f &&
-			m_Y < pTail->GetY() + 0.5f)
+		if (m_X == pTail->GetX() &&
+			m_Y == pTail->GetY())
 		{
-			// 일단 충돌 시 바로 게임 종료 되도록 구현
-			GameManager::GetInstance().Shutdown();
+			// 일단 충돌 시 바로 게임 오버 되도록 구현
+			GameManager::GetInstance().GameOver();
 			return;
 			
 			// Q. 왜 종료가 안 될 까요...? 그냥 막 잘 가는데.....
+			// 이제는 잘 됨미당...ㅎㅎㅎ
 		}
 	}
+*/
 }
 
 void SnakeHead::Render()
@@ -75,9 +80,42 @@ void SnakeHead::Render()
 	}
 }
 
-void SnakeHead::OnKeyPress(BYTE _key)
+bool SnakeHead::HitCheck(Object * _pOther)
 {
-	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
+	// 상대가 없다면 생략 (자기 자신의 체크는 허용(몸통과 꼬리의 충돌체크를 위해))
+	if (_pOther == nullptr)
+		return false;
+
+	// 자기 자신이 아닌 경우, 몸통 좌표와 먼저 충돌 체크
+	if (_pOther != this)
+	{
+		if (m_X == _pOther->GetX() &&
+			m_Y == _pOther->GetY())
+			return true;
+	}
+	// 꼬리 객체 중 하나라도 상대 객체와 부딪히면 나머지 꼬리와의 체크는 생략
+	for (auto& pTail : m_TailList)
+	{
+		if (pTail->GetX() == _pOther->GetX() &&
+			pTail->GetY() == _pOther->GetY())
+			return true;
+	}
+	return false;
+}
+
+void SnakeHead::OnHit(Object * _pHitter)
+{
+	// 꼬리와의 충돌(자기 자신과 충돌)하거나, 데스존인 경우 게임 오버 처리한다.
+	if (_pHitter == this || dynamic_cast<DeathZone*>(_pHitter) != nullptr)
+	{
+		GameManager::GetInstance().GameOver();
+	}
+
+}
+
+void SnakeHead::OnKeyPress(int _key)
+{
+	//RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
 
 	// Move() 함수로 이동 로직을 통일!
 	// 이제 각각 작성하지 않고 간결하게 짤 수 있게 되었다!
@@ -114,27 +152,40 @@ void SnakeHead::OnKeyPress(BYTE _key)
 		break;
 	*/
 	// 유저는 방향만 바꿔줄 수 있다.
+	// 180도로 움직일 수 없다.
 	case VK_UP:
 	{
-		m_CurDir = Direction::UP;
+		if (m_CurDir != Direction::DOWN)
+		{
+			m_CurDir = Direction::UP;
+		}
 	}
 	break;
 
 	case VK_DOWN:
 	{
-		m_CurDir = Direction::DOWN;
+		if (m_CurDir != Direction::UP)
+		{
+			m_CurDir = Direction::DOWN;
+		}
 	}
 	break;
 
 	case VK_LEFT:
 	{
-		m_CurDir = Direction::LEFT;
+		if (m_CurDir != Direction::RIGHT)
+		{
+			m_CurDir = Direction::LEFT;
+		}
 	}
 	break;
 
 	case VK_RIGHT:
 	{
-		m_CurDir = Direction::RIGHT;
+		if (m_CurDir != Direction::LEFT)
+		{
+			m_CurDir = Direction::RIGHT;
+		}
 	}
 	break;
 /*
@@ -177,6 +228,16 @@ void SnakeHead::OnKeyPress(BYTE _key)
 void SnakeHead::AddTail()
 {
 	Object* pTail = new Object();
-	pTail->SetShape(L'※');
+	pTail->SetShape(L'◇');
+	pTail->SetColor(Color::GREEN);
 	m_TailList.push_back(pTail);
+}
+
+void SnakeHead::ClearTails()
+{
+	for (auto& pTail : m_TailList)
+	{
+		delete pTail;
+	}
+	m_TailList.clear();
 }

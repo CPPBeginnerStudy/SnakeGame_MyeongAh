@@ -1,4 +1,7 @@
 ﻿#pragma once
+#include "Color.hpp"
+
+class Timer;
 
 // virtual 키워드의 의미
 // 어떤 클래스들을 상속 관계로 만들 때 virtual 키워드가 어떤 역할을 하는지 설명하면,
@@ -81,6 +84,9 @@ public:
 	virtual void Update(float _dt);
 	virtual void Render();
 
+	virtual bool HitCheck(Object* _pOther);
+	virtual void OnHit(Object* _pHitter);
+
 	// Init(), Release()는 엄청 큰 오브젝트를 만들었을 때,
 	// Delete 해주지 않고, 다시 초기화 해서 쓰는 방식으로 사용함.
 	// 우리 게임은 그정도로 큰 오브젝트가 아니고, 생성자에서 초기화 다 해줄 수 있는 수준이라 삭제함!
@@ -93,16 +99,18 @@ public:
 
 public:
 	wchar_t GetShape() const { return m_Shape; }
-	float GetX() const { return m_X; }
-	float GetY() const { return m_Y; }
+	Color GetColor() const { return m_Color; }
+	int GetX() const { return m_X; }
+	int GetY() const { return m_Y; }
 
 	void SetShape(wchar_t _shape) { m_Shape = _shape; }
-	void SetX(float _x) { m_X = _x; }
-	void SetY(float _y) { m_Y = _y; }
+	void SetColor(Color _color) { m_Color = _color; }
+	void SetX(int _x) { m_X = _x; }
+	void SetY(int _y) { m_Y = _y; }
 
 	// 방향과 거리를 인자로 받아서 이동을 수행하고
 	// 실제로 이동 했는지 여부를 bool 값으로 반환하는 함수
-	bool Move(Direction _dir, float _distance);
+	bool Move(Direction _dir, int _distance);
 
 	// private: 본 클래스 내에서만 접근 가능 (자식 클래스에서는 접근 X, 진짜 나 자신만 접근 되는 것)
 	// protected: 자식 클래스에서도 접근 가능
@@ -112,6 +120,10 @@ protected:
 	// cmd관련 라이브러리 함수에서 좌표값들을 short 타입으로 다루기 때문에
 	// 여기서도 short 타입으로 좌표 변수를 지정한다.
 	wchar_t m_Shape;
-	float m_X;
-	float m_Y;
+	Color m_Color;
+
+	// 뱀꼬리 잡기 게임 특성상 1칸 씩 도트 좌표를 움직이도록 구현하는 것이
+	// 여러 모로 좋기 때문에 실수형 좌표가 아니라 정수형 좌표를 사용한다.
+	int m_X;
+	int m_Y;
 };

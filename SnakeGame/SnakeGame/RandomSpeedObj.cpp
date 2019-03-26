@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "RandomSpeedObj.h"
-#include "Console.h"
+#include "Console.h""
 
 
 // 상속받은 클래스의 생성자는 부모 클래스의 생성자가 먼저 호출된 이후에 호출된다.
@@ -16,12 +16,13 @@
 //		C* pC = new C(); // A생성자 -> B생성자 -> C생성자 순으로 호출됨
 // }
 RandomSpeedObj::RandomSpeedObj()
-	: m_XSpeed(10.f)
-	, m_YSpeed(10.f)
+	: m_XSpeed(1)
+	, m_YSpeed(1)
 	, m_IsRight(false)
 	, m_IsBottom(false)
 {
 	m_Shape = L'★';
+	m_Color = Color::YELLOW;
 }
 
 // 상속받은 클래스의 소멸자는 자신이 먼저 호출된 후, 부모 클래스의 소멸자를 호출한다.
@@ -75,7 +76,7 @@ void RandomSpeedObj::Update(float _dt)
 	*/
 
 	// 화면의 바운더리를 벗어나려 하면, 반대 방향으로 전환하여 계속 움직이도록 한다.
-	RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
+	//RECT boundaryBox = Console::GetInstance().GetBoundaryBox();
 	/// > 제가 srand()에 대한 설명이 부족했었네요.
 	/// > srand()는 rand()사용할 때마다 호출하는 것이 아니라
 	/// > 게임 시작시 딱 한번만 호출되어야 합니다. (GameManager::Init()에서)
@@ -89,17 +90,21 @@ void RandomSpeedObj::Update(float _dt)
 	// 3개의 항으로 이루어져 있어, 삼항연산자라고 부르며,
 	// 첫 항에서의 true/false 여부에 따라 true이면 둘째항, false이면 셋째항을 수행
 	// (평가식) ? (true인 경우) : (false인 경우)
-	if (!Move(m_IsRight ? Direction::RIGHT : Direction::LEFT, 1.f))
+	if (!Move(m_IsRight ? Direction::RIGHT : Direction::LEFT, m_XSpeed))
 	{
 		// m_IsRight의 값이 true인 경우 Move()함수의 인자로 RIGHT를 넘기게 되고,
 		//					false인 경우 LEFT를 넘기게 하는 코드
 		// 이동이 실패하면(바운더리에 걸리면) 반대 방향으로 전환
 		// bool값 변수가 자신의 값을 반전시키는 코드 (true->false, false->true)
 		m_IsRight = !m_IsRight;
+
+		// 1~3으로 이동속도 랜덤 조정
+		m_XSpeed = rand() % 3 + 1;
 	}
-	if (!Move(m_IsBottom ? Direction::DOWN : Direction::UP, 1.f))
+	if (!Move(m_IsBottom ? Direction::DOWN : Direction::UP, m_YSpeed))
 	{
 		m_IsBottom = !m_IsBottom;
+		m_YSpeed = rand() % 3 + 1;
 	}
 
 	/*
@@ -167,4 +172,14 @@ void RandomSpeedObj::Render()
 	// 따라서 부모함수도 호출할 필요가 있을 경우 아래와같이 부모클래스::함수명 으로 호출해준다.
 	// 부모클래스의 구현과 다르게 처리할 게 없다면, 그냥 부모꺼를 여기다 다시 호출해주면 된다.
 	Object::Render();
+}
+
+bool RandomSpeedObj::HitCheck(Object * _pOther)
+{
+	return Object::HitCheck(_pOther);
+}
+
+void RandomSpeedObj::OnHit(Object * _pHitter)
+{
+	Object::OnHit(_pHitter);
 }

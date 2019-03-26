@@ -2,6 +2,7 @@
 class Object;
 class SnakeHead;
 class Apple;
+class DeathZone;
 
 class GameManager
 {
@@ -24,27 +25,46 @@ private:
 public:
 	void Run();
 	void Shutdown();
+	void GameOver();
+
+	int GetRandom(int _min, int _max) const;
+	int GetGameLevel() const { return m_GameLevel; }
+
+	void OnAppleEaten();
 
 private: // 클래스 내에서만 호출할 수 있음
 	void Init();
 	void Release();
-	void MainLoop();
+	void GameLoop();
 
 	void Update(float _dt);
 	void Render();
 
-	void KeyInputHandling(float _dt);
+	void KeyInputHandling();
+	bool CheckKeyInput(int _keyIdx);
+
+	void PrintGameState();
+	void ShowGameOverState();
+	void GoToNextStage();
+	void CollisionCheck();
 
 private:
-	bool m_IsOn;
+	bool m_IsRunning;
+	bool m_IsPlaying;
+
 	std::list<Object*> m_ObjectList;
 	// 한 프레임마다 움직여야 할 오브젝트를 찾아갈 수 있도록 힙메모리에 저장될 오브젝트의 주소를 저장하는 리스트
 
 	// 포인터 변수의 이름 앞에 p를 붙여주는 네이밍 관습이 있다.
 	SnakeHead*	m_pSnakeHead;
 	Apple*		m_pApple;
+	DeathZone*  m_pDeathZone;
 
 	float m_GameSpeed;
+	int   m_GameLevel;
+	int	  m_GameScore;
+	int   m_EatAppleNum;
+	int   m_GoalAppleNum;
 };
 
 // 멤버 변수에는 m_대문자로 시작

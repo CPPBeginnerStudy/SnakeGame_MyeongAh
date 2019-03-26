@@ -86,6 +86,7 @@ void Console::Clear()
 	DWORD dw;
 	DWORD screenSize = m_ScreenWidth * m_ScreenHeight;
 	FillConsoleOutputCharacter(m_ScreenBuffer[m_BackBufferIdx], L' ', screenSize, { 0, 0 }, &dw);
+	FillConsoleOutputAttribute(m_ScreenBuffer[m_BackBufferIdx], NULL, screenSize, { 0, 0 }, &dw);
 }
 
 void Console::SwapBuffer()
@@ -101,11 +102,13 @@ void Console::SwapBuffer()
 	}
 }
 
-void Console::Print(wchar_t _shape, short _x, short _y)
+void Console::Print(wchar_t _shape, Color _color, short _x, short _y)
 {
 	// 현재의 백버퍼에서 커서를 지정한 위치로 이동시키고, 그 위치에 1개의 글자를 Write.
 	DWORD dw;
 	SetConsoleCursorPosition(m_ScreenBuffer[m_BackBufferIdx], { _x, _y });
+	SetConsoleTextAttribute(m_ScreenBuffer[m_BackBufferIdx], _color);
+	SetConsoleCursorPosition(m_ScreenBuffer[m_BackBufferIdx], {_x, _y});
 	WriteConsole(m_ScreenBuffer[m_BackBufferIdx], &_shape, 1, &dw, nullptr);
 }
 
@@ -118,6 +121,7 @@ void Console::PrintText(const std::wstring & _text, short _x, short _y)
 	// 기본적으로는 Print() 함수만 구현해도 되지만, 메뉴 등 텍스트 정보를 편하게 출력하려면
 	// 이러한 문자열 출력용 함수를 구현해 놓는 것이 좋음
 	DWORD dw;
+	SetConsoleTextAttribute(m_ScreenBuffer[m_BackBufferIdx], Color::WHITE); // 일단 무조건 흰색으로
 	SetConsoleCursorPosition(m_ScreenBuffer[m_BackBufferIdx], { _x, _y });
 	WriteConsole(m_ScreenBuffer[m_BackBufferIdx], _text.c_str(), _text.length(), &dw, nullptr);
 }
@@ -130,7 +134,7 @@ RECT Console::GetBoundaryBox() const
 	RECT boundaryBox;
 	boundaryBox.top = 0;
 	boundaryBox.left = 0;
-	boundaryBox.right = m_ScreenWidth - 2;
+	boundaryBox.right = ( m_ScreenWidth - 2 ) / 2; // cmd 좌표계에서 x의 간격이 1/2이기 때문에 인게임 좌표 계산에 쓰기 전에 2로 나누어 준다.
 	boundaryBox.bottom = m_ScreenHeight - 2; // 아래 한 줄을 비우기 위해 -1 추가 (마지막 줄은 오른쪽 끝이 표시 불가)
 	return boundaryBox;
 }

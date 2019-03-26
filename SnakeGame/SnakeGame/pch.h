@@ -12,6 +12,7 @@
 // TODO: 여기에 미리 컴파일하려는 헤더 추가
 #include <windows.h>
 #include <time.h>
+#include <conio.h>
 
 #include <iostream>
 #include <string>
@@ -20,5 +21,6 @@
 #include <map>
 #include <algorithm>
 #include <chrono>
+#include <sstream>
 
 #endif //PCH_H
